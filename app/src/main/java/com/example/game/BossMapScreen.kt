@@ -38,17 +38,17 @@ fun BossMapScreen0(
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     val titles = listOf(
-        "Introduction",
-        "Basic Concepts",
-        "Advanced Techniques",
-        "Final Review"
+        "Kotlin Core",
+        "Layouts & UI",
+        "State & Logic",
+        "Real App Development"
     )
 
     val descriptions = listOf(
         "Get started with the basics begin learning",
         "Learn the fundamental concepts here.",
         "Deep dive into advanced techniques.",
-        "Test your knowledge and review everything."
+        "Apply your knowledge and review everything."
     )
 
     val img = listOf(

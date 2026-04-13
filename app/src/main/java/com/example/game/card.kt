@@ -107,13 +107,13 @@ fun ScoreCard1(
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = Color(0xFF7B9ACC)
                     )
                 }
 
                 Text(
                     text = "Score Card",
-                    color = Color.White,
+                    color = Color(0xFF7B9ACC),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -122,7 +122,7 @@ fun ScoreCard1(
                     Icon(
                         imageVector = Icons.Default.Share,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = Color(0xFF7B9ACC)
                     )
                 }
             }
