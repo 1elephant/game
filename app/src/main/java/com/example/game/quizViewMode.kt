@@ -34,3 +34,6 @@ class QuizViewModel : ViewModel() {
         }
     }
 }
+class AppViewModel : ViewModel() {
+    var isSoundOn by mutableStateOf(true)
+}

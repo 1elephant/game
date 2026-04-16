@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun QuizScreen(
+    appViewModel: AppViewModel,
     questions: List<Question>,   // ✅ changed
     level: Int,
     onQuizFinished: (level: Int, score: Int) -> Unit
@@ -53,6 +54,7 @@ fun QuizScreen(
             )
         ) {
             ScoreCard1(
+                appViewModel = appViewModel,
                 totalQuestions = questions.size,
                 correctAnswers = score
             )

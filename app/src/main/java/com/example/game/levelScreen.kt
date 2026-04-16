@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Spa
+import androidx.compose.material.icons.filled.VolumeOff
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -48,18 +50,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DifficultyScreen(
+    appViewModel:AppViewModel,
     chapter: Int,
     navController: NavController,
     quizViewModel: QuizViewModel // ✅ PASS from MainActivity (NO viewModel())
 ) {
+    val isSoundOn = appViewModel.isSoundOn
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-
+//    var isSoundOn by remember { mutableStateOf(true) }
     val difficulties = listOf(
         Triple("Easy", "Beginner", Difficulty.EASY),
         Triple("Medium", "Intermediate", Difficulty.MEDIUM),
@@ -67,6 +72,7 @@ fun DifficultyScreen(
     )
 
     val pagerState = rememberPagerState(pageCount = { difficulties.size })
+    MusicPlayer(isSoundOn,R.raw.sapphire)
 
     // ✅ prevent double navigation
     var isNavigating by remember { mutableStateOf(false) }
@@ -96,7 +102,20 @@ fun DifficultyScreen(
                     }
                 )
                 Text("Select Difficulty", fontWeight = FontWeight.SemiBold,color=Color(0xFF7B9ACC),fontSize = 18.sp)
-                Icon(Icons.Default.Settings, contentDescription = null,tint = Color(0xFF7B9ACC))
+//                Icon(Icons.Default.Settings, contentDescription = null,tint = Color(0xFF7B9ACC))
+                Icon(
+                    imageVector = if (isSoundOn)
+                        Icons.Default.VolumeUp
+                    else
+                        Icons.Default.VolumeOff,
+                    contentDescription = "Sound Toggle",
+                    modifier = Modifier
+                        .clickable {
+                            appViewModel.isSoundOn = !appViewModel.isSoundOn
+                        },
+                    tint = Color(0xFF7B9ACC),
+
+                    )
             }
 
             Spacer(modifier = Modifier.height(30.dp))

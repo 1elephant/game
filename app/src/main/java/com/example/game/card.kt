@@ -1,4 +1,5 @@
 package com.example.game
+import android.media.MediaPlayer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.PlayArrow
@@ -28,12 +29,15 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.VolumeOff
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,14 +54,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 @Composable
 fun ScoreCard1(
+    appViewModel: AppViewModel,
     totalQuestions: Int,
     correctAnswers: Int
 ) {
+    val isSoundOn = appViewModel.isSoundOn
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-
     val percentage = if (totalQuestions > 0)
         (correctAnswers * 100) / totalQuestions
     else 0
@@ -68,6 +74,8 @@ fun ScoreCard1(
         percentage >= 30 -> 1
         else -> 0
     }
+//    var isSoundOn by remember { mutableStateOf(true) }
+    MusicPlayer(isSoundOn,R.raw.sapphire)
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -118,12 +126,19 @@ fun ScoreCard1(
                     fontWeight = FontWeight.SemiBold
                 )
 
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    appViewModel.isSoundOn = !appViewModel.isSoundOn
+                    }
+                ) {
                     Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = null,
-                        tint = Color(0xFF7B9ACC)
-                    )
+                        imageVector = if (isSoundOn)
+                            Icons.Default.VolumeUp
+                        else
+                            Icons.Default.VolumeOff,
+                        contentDescription = "Sound Toggle",
+                        tint = Color(0xFF7B9ACC),
+
+                        )
                 }
             }
         }

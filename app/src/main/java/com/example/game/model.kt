@@ -1,5 +1,10 @@
 package com.example.game
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+
 sealed class Question {
 
     data class MCQ(
@@ -31,244 +36,191 @@ sealed class Question {
         }
     }
 }
-
-data class Level(
-    val levelNumber: Int,
-    val questions: List<Question>
-)
 object QuestionBank {
 
     val levels = listOf(
 
-        // 🔥 LEVEL 1 — Kotlin Basics in Code
+        // 🔥 LEVEL 1 — Kotlin Logic & Output
         Level(
             levelNumber = 1,
             questions = listOf(
 
-                Question.FillBlank(
-                    "val name: String? = null\nprintln(name.___)",
-                    listOf("length")
-                ),
-
-                Question.FillBlank(
-                    "val name: String? = null\nprintln(name ___ \"Guest\")",
-                    listOf("?:")
-                ),
-
-                Question.FillBlank(
-                    "fun add(a:Int,b:Int):Int {\n    return a ___ b\n}",
-                    listOf("+")
+                Question.MCQ(
+                    "val name: String? = null\nval result = name?.length ?: 5\nprintln(result)",
+                    listOf("5", "0", "Crash", "null"),
+                    0
                 ),
 
                 Question.MCQ(
-                    "val x: String? = null\nprintln(x!!.length)",
-                    listOf("Crash", "0", "null"),
+                    "val list = listOf(1, 2, 3, 4)\nval result = list.filter { it % 2 == 0 }.map { it * 2 }\nprintln(result)",
+                    listOf("[4, 8]", "[2, 4]", "[1, 3]", "[2, 8]"),
                     0
                 ),
 
                 Question.FillBlank(
-                    "data class User(val name:String)\nval u1 = User(\"A\")\nval u2 = u1.___(name=\"B\")",
-                    listOf("copy")
-                ),
-
-                Question.FillBlank(
-                    "val list = listOf(1,2,3)\nprintln(list.___())",
-                    listOf("size")
-                ),
-
-                Question.FillBlank(
-                    "val x = 10\nval y = 20\nprintln(x ___ y)",
-                    listOf("+")
+                    "val str = \"Kotlin\"\nval res = str.substring(0, 3)\nprintln(res) // ___",
+                    listOf("Kot")
                 ),
 
                 Question.MCQ(
-                    "val a = null\nprintln(a == null)",
-                    listOf("true", "false"),
+                    "fun update(x: Int): Int {\n    var y = x\n    y += 5\n    return y\n}\n\nval a = 10\nval b = update(a)\nprintln(a)\nprintln(b)",
+                    listOf("10 and 15", "15 and 15", "10 and 10", "Crash"),
                     0
                 ),
 
                 Question.FillBlank(
-                    "fun greet(name:String = \"User\") {\n println(\"Hello \$name\")\n}\ngreet() // prints ___",
-                    listOf("Hello User")
-                ),
-
-                Question.FillBlank(
-                    "val str = \"Kotlin\"\nprintln(str.___())",
-                    listOf("length")
+                    "val list = listOf(\"a\", \"bb\", \"ccc\")\nval result = list.map { it.length }\nprintln(result) // ___",
+                    listOf("[1, 2, 3]")
                 )
             )
         ),
 
-        // 🔥 LEVEL 2 — Compose UI Code
+        // 🔥 LEVEL 2 — Compose (Real Thinking + Multi-step)
         Level(
             levelNumber = 2,
             questions = listOf(
 
                 Question.FillBlank(
-                    "@___\nfun MyScreen() {\n Text(\"Hello\")\n}",
-                    listOf("Composable")
+                    "@Composable\nfun Test() {\n    var count by ___ { mutableStateOf(0) }\n\n    Button(onClick = { ___ }) {\n        Text(\"count\")\n    }\n}",
+                    listOf("remember", "count++")
                 ),
 
                 Question.FillBlank(
-                    "Column {\n Text(\"A\")\n Text(\"B\")\n}\n// Items are arranged ___",
-                    listOf("vertically")
-                ),
-
-                Question.FillBlank(
-                    "Row {\n Text(\"A\")\n Text(\"B\")\n}\n// Items are arranged ___",
-                    listOf("horizontally")
-                ),
-
-                Question.FillBlank(
-                    "LazyColumn {\n items(10) {\n  Text(\"Item \$it\")\n }\n}\n// This creates ___ list",
-                    listOf("scrollable")
-                ),
-
-                Question.FillBlank(
-                    "Box {\n Text(\"Hello\")\n Text(\"World\")\n}\n// Children are ___",
-                    listOf("stacked")
-                ),
-
-                Question.FillBlank(
-                    "Text(\"Hi\", modifier = Modifier.___())",
-                    listOf("fillMaxWidth")
-                ),
-
-                Question.FillBlank(
-                    "Modifier.padding(16.dp)\n// adds ___ around composable",
-                    listOf("space")
-                ),
-
-                Question.FillBlank(
-                    "LazyVerticalGrid(columns = GridCells.___(2))",
-                    listOf("Fixed")
-                ),
-
-                Question.FillBlank(
-                    "HorizontalPager(pageCount = 5) {\n Text(\"Page \$it\")\n}\n// enables ___",
-                    listOf("swipe")
+                    "@Composable\nfun Test() {\n    val list = (1..1000).toList()\n\n    ___ {\n        items(list.size) {\n            Text(\"Item it\")\n        }\n    }\n}",
+                    listOf("LazyColumn")
                 ),
 
                 Question.MCQ(
-                    "LazyColumn vs Column?",
-                    listOf("Lazy loads items", "Same thing"),
-                    0
-                )
-            )
-        ),
-
-        // 🔥 LEVEL 3 — State & ViewModel (CODE)
-        Level(
-            levelNumber = 3,
-            questions = listOf(
-
-                Question.FillBlank(
-                    "var count by ___ { mutableStateOf(0) }",
-                    listOf("remember")
-                ),
-
-                Question.FillBlank(
-                    "val state = mutableStateOf(0)\nstate.value = 5\n// triggers ___",
-                    listOf("recomposition")
-                ),
-
-                Question.FillBlank(
-                    "@Composable\nfun Counter() {\n var count by remember { mutableStateOf(0) }\n Button(onClick = { count++ }) {\n  Text(\"Count: \$count\")\n }\n}\n// count updates UI via ___",
-                    listOf("state")
-                ),
-
-                Question.FillBlank(
-                    "class MyVM: ViewModel() {\n val count = ___(0)\n}",
-                    listOf("mutableStateOf")
-                ),
-
-                Question.FillBlank(
-                    "val vm: MyVM = ___()\n// used in composable",
-                    listOf("viewModel")
-                ),
-
-                Question.FillBlank(
-                    "remember saves value during ___",
-                    listOf("recomposition")
-                ),
-
-                Question.MCQ(
-                    "ViewModel survives rotation?",
-                    listOf("Yes", "No"),
+                    "@Composable\nfun Test() {\n    val list = (1..1000).toList()\n\n    Column {\n        list.forEach {\n            Text(\"Item it\")\n        }\n    }\n}",
+                    listOf(
+                        "Performance issue for large lists",
+                        "Nothing will show",
+                        "Crash always",
+                        "Same as LazyColumn"
+                    ),
                     0
                 ),
 
                 Question.FillBlank(
-                    "State hoisting moves state ___",
-                    listOf("up")
-                ),
-
-                Question.FillBlank(
-                    "val text by remember { mutableStateOf(\"\") }\nTextField(value = text, onValueChange = { ___ })",
+                    "@Composable\nfun Test() {\n    var text by remember { mutableStateOf(\"\") }\n\n    TextField(\n        value = text,\n        onValueChange = { ___ }\n    )\n}",
                     listOf("text = it")
                 ),
 
                 Question.FillBlank(
-                    "State should be ___ to trigger UI update",
+                    "@Composable\nfun Test() {\n    var count by remember { mutableStateOf(0) }\n\n    println(\"Recompose\")\n\n    Button(onClick = { count++ }) {\n        Text(\"count\")\n    }\n}\n// Button click triggers ___",
+                    listOf("recomposition")
+                ),
+
+                Question.MCQ(
+                    "@Composable\nfun Test() {\n    val count = mutableStateOf(0)\n\n    Button(onClick = { count.value++ }) {\n        Text(\"{count.value}\")\n    }\n}\n\n// What is missing here for correct Compose usage?",
+                    listOf(
+                        "remember",
+                        "launch",
+                        "collect",
+                        "padding"
+                    ),
+                    0
+                ),
+
+                Question.FillBlank(
+                    "@Composable\nfun Test() {\n    val count = remember { mutableStateOf(0) }\n\n    Button(onClick = { count.value++ }) {\n        Text(\"{count.value}\")\n    }\n}\n// count is updated because state is ___",
                     listOf("observable")
                 )
             )
         ),
 
-        // 🔥 LEVEL 4 — Coroutines + Architecture (CODE)
+        // 🔥 LEVEL 3 — State & ViewModel
         Level(
-            levelNumber = 4,
+            levelNumber = 3,
             questions = listOf(
 
-                Question.FillBlank(
-                    "___(Dispatchers.IO) {\n // network call\n}",
-                    listOf("launch")
-                ),
-
-                Question.FillBlank(
-                    "suspend fun fetch() {}\n// call inside ___",
-                    listOf("coroutine")
-                ),
-
-                Question.FillBlank(
-                    "viewModelScope.___ {\n // async work\n}",
-                    listOf("launch")
-                ),
-
-                Question.FillBlank(
-                    "val data = flowOf(1,2,3)\ndata.___ { println(it) }",
-                    listOf("collect")
-                ),
-
-                Question.FillBlank(
-                    "Room is used for ___ database",
-                    listOf("local")
-                ),
-
-                Question.FillBlank(
-                    "Repository handles ___ logic",
-                    listOf("data")
+                Question.MCQ(
+                    "@Composable\nfun Counter() {\n    var count = 0\n    Button(onClick = { count++ }) {\n        Text(\"count\")\n    }\n}",
+                    listOf(
+                        "UI does not update",
+                        "UI updates",
+                        "Crash",
+                        "Infinite loop"
+                    ),
+                    0
                 ),
 
                 Question.MCQ(
-                    "Dispatchers.Main is for?",
-                    listOf("UI", "Network"),
+                    "@Composable\nfun Counter() {\n    var count by remember { mutableStateOf(0) }\n    Button(onClick = { count++ }) {\n        Text(\"count\")\n    }\n}",
+                    listOf(
+                        "UI updates correctly",
+                        "UI does not update",
+                        "Crash",
+                        "No change"
+                    ),
                     0
                 ),
 
                 Question.FillBlank(
-                    "Flow is ___ stream",
-                    listOf("cold")
+                    "TextField(\n value = text,\n onValueChange = { ___ }\n)",
+                    listOf("text = it")
                 ),
 
-                Question.FillBlank(
-                    "suspend functions run ___ blocking thread",
-                    listOf("without")
+                Question.MCQ(
+                    "class MyVM : ViewModel() {\n    var count = mutableStateOf(0)\n}",
+                    listOf(
+                        "State survives rotation",
+                        "State resets",
+                        "Crash",
+                        "No effect"
+                    ),
+                    0
+                )
+            )
+        ),
+
+        // 🔥 LEVEL 4 — Coroutines
+        Level(
+            levelNumber = 4,
+            questions = listOf(
+
+                Question.MCQ(
+                    "viewModelScope.launch {\n    val data = fetchData()\n}",
+                    listOf(
+                        "Runs asynchronously",
+                        "Blocks UI",
+                        "Crash",
+                        "Runs forever"
+                    ),
+                    0
                 ),
 
-                Question.FillBlank(
-                    "MVVM = Model View ___",
-                    listOf("ViewModel")
+                Question.MCQ(
+                    "suspend fun fetch(): String {\n    delay(1000)\n    return \"Done\"\n}",
+                    listOf(
+                        "Must be called in coroutine",
+                        "Can be called anywhere",
+                        "Runs instantly",
+                        "Crash"
+                    ),
+                    0
+                ),
+
+                Question.MCQ(
+                    "withContext(Dispatchers.IO) {\n    // network\n}",
+                    listOf(
+                        "Runs on background thread",
+                        "Runs on UI thread",
+                        "Crash",
+                        "No difference"
+                    ),
+                    0
+                ),
+
+                Question.MCQ(
+                    "val flow = flowOf(1,2,3)\nflow.collect { println(it) }",
+                    listOf(
+                        "Prints 1 2 3",
+                        "Prints only 1",
+                        "Crash",
+                        "Prints nothing"
+                    ),
+                    0
                 )
             )
         )
@@ -277,92 +229,12 @@ object QuestionBank {
     fun getQuestions(level: Int): List<Question> =
         levels.find { it.levelNumber == level }?.questions ?: emptyList()
 }
-//object QuestionBank {
-//
-//    val levels = listOf(
-//
-//        Level(
-//            levelNumber = 1,
-//            questions = listOf(
-//                Question.MCQ(
-//                    "In Kotlin which keyword is used for define functions",
-//                    listOf("fun", "def", "no keyword", "compose"),
-//                    0
-//                ),
-//
-//                Question.FillBlank(
-//                    "@___\nfun greet(text: String) {\n    println(\"hello \$text\")\n}",
-//                    listOf("Composable")
-//                )
-//            )
-//        ),
-//
-//        Level(
-//            levelNumber = 2,
-//            questions = listOf(
-//                Question.MCQ(
-//                    "Capital of India?",
-//                    listOf("Delhi", "Mumbai", "Chennai"),
-//                    0
-//                ),
-//
-//                // 🔥 Single blank
-//                Question.FillBlank(
-//                    "5 + 5 = ___",
-//                    listOf("10")
-//                ),
-//
-//                // 🔥 Multiple blanks example
-//                Question.FillBlank(
-//                    "___ is the capital of ___",
-//                    listOf("Delhi", "India")
-//                )
-//            )
-//        ),
-//
-//        Level(
-//            levelNumber = 3,
-//            questions = listOf(
-//                Question.MCQ(
-//                    "Sun rises from?",
-//                    listOf("West", "East"),
-//                    1
-//                ),
-//
-//                // 🔥 Multiple blanks
-//                Question.FillBlank(
-//                    "Sun rises from ___ and sets in ___",
-//                    listOf("East", "West")
-//                )
-//            )
-//        ),
-//
-//        Level(
-//            levelNumber = 4,
-//            questions = listOf(
-//                Question.MCQ(
-//                    "10 / 2?",
-//                    listOf("2", "5", "6", "10"),
-//                    1
-//                ),
-//
-//                Question.FillBlank(
-//                    "Water freezes at ___ °C",
-//                    listOf("0")
-//                ),
-//
-//                // 🔥 Multiple blanks
-//                Question.FillBlank(
-//                    "___ + ___ = 10",
-//                    listOf("5", "5")
-//                )
-//            )
-//        )
-//    )
-//
-//    fun getQuestions(level: Int): List<Question> =
-//        levels.find { it.levelNumber == level }?.questions ?: emptyList()
-//}
+
+
+data class Level(
+    val levelNumber: Int,
+    val questions: List<Question>
+)
 data class BossProgress(
     val scores: List<Int> = emptyList()
 ) {

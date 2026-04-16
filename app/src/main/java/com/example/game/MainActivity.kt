@@ -19,6 +19,7 @@ import com.example.game.ui.theme.GameTheme
 class MainActivity : ComponentActivity() {
 
     private val quizViewModel: QuizViewModel by viewModels()
+    private val appViewModel: AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +52,7 @@ class MainActivity : ComponentActivity() {
                     // 🔹 BOSS MAP
                     composable(Screen.BossMapScreen.route) {
                         BossMapScreen(
+                            appViewModel = appViewModel,
                             progress = progress,
                             navController = navController
                         )
@@ -63,6 +65,7 @@ class MainActivity : ComponentActivity() {
                             backStackEntry.arguments?.getString("chapter")?.toIntOrNull() ?: 1
 
                         DifficultyScreen(
+                            appViewModel = appViewModel,
                             chapter = chapter,
                             navController = navController,
                             quizViewModel = quizViewModel
@@ -96,6 +99,7 @@ class MainActivity : ComponentActivity() {
                             }
                         } else {
                             QuizScreen(
+                                appViewModel=appViewModel,
                                 questions = questions,
                                 level = chapter,
                                 onQuizFinished = { _, score ->
@@ -120,6 +124,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         QuizScreen(
+                            appViewModel=appViewModel,
                             questions = questions,
                             level = level,
                             onQuizFinished = { lvl, score ->
