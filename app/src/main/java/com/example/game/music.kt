@@ -16,17 +16,22 @@ fun MusicPlayer(
 ) {
     val context = LocalContext.current
 
-    val mediaPlayer = remember {
+    val mediaPlayer = remember(songResId) {
         MediaPlayer.create(context, songResId).apply {
             isLooping = true
         }
     }
 
-    LaunchedEffect(isSoundOn, mediaPlayer) {
+    // 🔥 Only depend on isSoundOn
+    LaunchedEffect(isSoundOn) {
         if (isSoundOn) {
-            mediaPlayer.start()
+            if (!mediaPlayer.isPlaying) {
+                mediaPlayer.start()
+            }
         } else {
-            mediaPlayer.pause()
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+            }
         }
     }
 

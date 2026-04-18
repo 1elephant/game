@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 @Composable
 fun QuizScreen(
     appViewModel: AppViewModel,
-    questions: List<Question>,   // ✅ changed
+    questions: List<Question>,
     level: Int,
     onQuizFinished: (level: Int, score: Int) -> Unit
 ) {
@@ -29,29 +29,31 @@ fun QuizScreen(
     var currentIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf(0) }
     var isFinished by remember { mutableStateOf(false) }
-    val currentQuestion = questions.getOrNull(currentIndex)
-    if (currentQuestion == null) {
-        isFinished = true
-        return
-    }
+
     val colors = listOf(
         Color(0xFFF9D0CD),
         Color(0xFFFFCCD5),
         Color(0xFFFFB3C1),
     )
+
+    // ✅ SAFE: handle empty list FIRST
     if (questions.isEmpty()) {
         Text("No questions for this level")
         return
     }
 
+    // ✅ SAFE: prevent index crash
+    if (currentIndex >= questions.size) {
+        isFinished = true
+    }
+
     if (isFinished) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = colors
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(colors = colors)
                 )
-            )
         ) {
             ScoreCard1(
                 appViewModel = appViewModel,
@@ -65,54 +67,55 @@ fun QuizScreen(
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
                 containerColor = Color(0xFFFF758F)
-
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-
+                    contentDescription = "Back"
                 )
             }
         }
-    } else {
+        return
+    }
 
-        val currentQuestion = questions[currentIndex]
+    // ✅ SAFE CURRENT QUESTION
+    val question = questions[currentIndex]
 
-        when (val q = currentQuestion) {
+    when (question) {
 
-            is Question.MCQ -> {
-                MCQView(
-                    mcq = q,
-                    currentQuestion = currentIndex,
-                    totalQuestions = questions.lastIndex,
-                    onAnswerSelected = { isCorrect ->
-                        if (isCorrect) score++
+        is Question.MCQ -> {
+            MCQView(
+                mcq = question,
+                currentQuestion = currentIndex,
+                totalQuestions = questions.size,   // ❗ FIXED (was lastIndex)
+                onAnswerSelected = { isCorrect ->
 
-                        if (currentIndex < questions.lastIndex) {
-                            currentIndex++
-                        } else {
-                            isFinished = true
-                        }
+                    if (isCorrect) score++
+
+                    if (currentIndex + 1 < questions.size) {
+                        currentIndex++
+                    } else {
+                        isFinished = true
                     }
-                )
-            }
+                }
+            )
+        }
 
-            is Question.FillBlank -> {
-                FillBlankView(
-                    question = q,
-                    currentQuestion = currentIndex,
-                    totalQuestions = questions.size,
-                    onAnswerSubmitted = { isCorrect ->
-                        if (isCorrect) score++
+        is Question.FillBlank -> {
+            FillBlankView(
+                question = question,
+                currentQuestion = currentIndex,
+                totalQuestions = questions.size,
+                onAnswerSubmitted = { isCorrect ->
 
-                        if (currentIndex < questions.lastIndex) {
-                            currentIndex++
-                        } else {
-                            isFinished = true
-                        }
+                    if (isCorrect) score++
+
+                    if (currentIndex + 1 < questions.size) {
+                        currentIndex++
+                    } else {
+                        isFinished = true
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

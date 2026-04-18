@@ -19,6 +19,7 @@ benchmarkTraceprocessor = "1.4.1"
 uiText = "1.10.6"
 foundation = "1.10.6"
 animation = "1.10.6"
+firebaseAuthKtx = "24.0.1"
 
 [libraries]
 androidx-compose-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -48,6 +49,7 @@ androidx-benchmark-traceprocessor = { group = "androidx.benchmark", name = "benc
 androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

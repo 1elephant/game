@@ -27,6 +27,12 @@ sealed class Question {
         val question: String,
         val correctAnswers: List<String>
     ) : Question() {
+        init {
+            val blanks = question.split("___").size - 1
+            require(blanks == correctAnswers.size) {
+                "Mismatch: blanks=$blanks answers=${correctAnswers.size}"
+            }
+        }
 
         fun isCorrect(answers: List<String>): Boolean {
             if (answers.size != correctAnswers.size) return false
@@ -57,21 +63,21 @@ object QuestionBank {
                     0
                 ),
 
-                Question.FillBlank(
-                    "val str = \"Kotlin\"\nval res = str.substring(0, 3)\nprintln(res) // ___",
-                    listOf("Kot")
-                ),
+//                Question.FillBlank(
+//                    "val str = \"Kotlin\"\nval res = str.substring(0, 3)\nprintln(res) // ___",
+//                    listOf("Kot")
+//                ),
 
                 Question.MCQ(
                     "fun update(x: Int): Int {\n    var y = x\n    y += 5\n    return y\n}\n\nval a = 10\nval b = update(a)\nprintln(a)\nprintln(b)",
                     listOf("10 and 15", "15 and 15", "10 and 10", "Crash"),
                     0
                 ),
-
-                Question.FillBlank(
-                    "val list = listOf(\"a\", \"bb\", \"ccc\")\nval result = list.map { it.length }\nprintln(result) // ___",
-                    listOf("[1, 2, 3]")
-                )
+//
+//                Question.FillBlank(
+//                    "val list = listOf(\"a\", \"bb\", \"ccc\")\nval result = list.map { it.length }\nprintln(result) // ___",
+//                    listOf("[1, 2, 3]")
+//                )
             )
         ),
 
@@ -79,16 +85,16 @@ object QuestionBank {
         Level(
             levelNumber = 2,
             questions = listOf(
-
-                Question.FillBlank(
-                    "@Composable\nfun Test() {\n    var count by ___ { mutableStateOf(0) }\n\n    Button(onClick = { ___ }) {\n        Text(\"count\")\n    }\n}",
-                    listOf("remember", "count++")
-                ),
-
-                Question.FillBlank(
-                    "@Composable\nfun Test() {\n    val list = (1..1000).toList()\n\n    ___ {\n        items(list.size) {\n            Text(\"Item it\")\n        }\n    }\n}",
-                    listOf("LazyColumn")
-                ),
+//
+//                Question.FillBlank(
+//                    "@Composable\nfun Test() {\n    var count by ___ { mutableStateOf(0) }\n\n    Button(onClick = { ___ }) {\n        Text(\"count\")\n    }\n}",
+//                    listOf("remember", "count++")
+//                ),
+//
+//                Question.FillBlank(
+//                    "@Composable\nfun Test() {\n    val list = (1..1000).toList()\n\n    ___ {\n        items(list.size) {\n            Text(\"Item it\")\n        }\n    }\n}",
+//                    listOf("LazyColumn")
+//                ),
 
                 Question.MCQ(
                     "@Composable\nfun Test() {\n    val list = (1..1000).toList()\n\n    Column {\n        list.forEach {\n            Text(\"Item it\")\n        }\n    }\n}",
@@ -101,15 +107,15 @@ object QuestionBank {
                     0
                 ),
 
-                Question.FillBlank(
-                    "@Composable\nfun Test() {\n    var text by remember { mutableStateOf(\"\") }\n\n    TextField(\n        value = text,\n        onValueChange = { ___ }\n    )\n}",
-                    listOf("text = it")
-                ),
-
-                Question.FillBlank(
-                    "@Composable\nfun Test() {\n    var count by remember { mutableStateOf(0) }\n\n    println(\"Recompose\")\n\n    Button(onClick = { count++ }) {\n        Text(\"count\")\n    }\n}\n// Button click triggers ___",
-                    listOf("recomposition")
-                ),
+//                Question.FillBlank(
+//                    "@Composable\nfun Test() {\n    var text by remember { mutableStateOf(\"\") }\n\n    TextField(\n        value = text,\n        onValueChange = { ___ }\n    )\n}",
+//                    listOf("text = it")
+//                ),
+//
+//                Question.FillBlank(
+//                    "@Composable\nfun Test() {\n    var count by remember { mutableStateOf(0) }\n\n    println(\"Recompose\")\n\n    Button(onClick = { count++ }) {\n        Text(\"count\")\n    }\n}\n// Button click triggers ___",
+//                    listOf("recomposition")
+//                ),
 
                 Question.MCQ(
                     "@Composable\nfun Test() {\n    val count = mutableStateOf(0)\n\n    Button(onClick = { count.value++ }) {\n        Text(\"{count.value}\")\n    }\n}\n\n// What is missing here for correct Compose usage?",
@@ -121,11 +127,11 @@ object QuestionBank {
                     ),
                     0
                 ),
-
-                Question.FillBlank(
-                    "@Composable\nfun Test() {\n    val count = remember { mutableStateOf(0) }\n\n    Button(onClick = { count.value++ }) {\n        Text(\"{count.value}\")\n    }\n}\n// count is updated because state is ___",
-                    listOf("observable")
-                )
+//
+//                Question.FillBlank(
+//                    "@Composable\nfun Test() {\n    val count = remember { mutableStateOf(0) }\n\n    Button(onClick = { count.value++ }) {\n        Text(\"{count.value}\")\n    }\n}\n// count is updated because state is ___",
+//                    listOf("observable")
+//                )
             )
         ),
 
@@ -156,10 +162,10 @@ object QuestionBank {
                     0
                 ),
 
-                Question.FillBlank(
-                    "TextField(\n value = text,\n onValueChange = { ___ }\n)",
-                    listOf("text = it")
-                ),
+//                Question.FillBlank(
+//                    "TextField(\n value = text,\n onValueChange = { ___ }\n)",
+//                    listOf("text = it")
+//                ),
 
                 Question.MCQ(
                     "class MyVM : ViewModel() {\n    var count = mutableStateOf(0)\n}",
@@ -264,7 +270,7 @@ object LearningQuestionBank {
             difficulty = Difficulty.EASY,
             questions = listOf(
                 Question.MCQ("What is Kotlin?", listOf("Language", "OS", "IDE"), 0),
-                Question.FillBlank("Kotlin is developed by ___", listOf("JetBrains"))
+//                Question.FillBlank("Kotlin is developed by ___", listOf("JetBrains"))
             )
         ),
 

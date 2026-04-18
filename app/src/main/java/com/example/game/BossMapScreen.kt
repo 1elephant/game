@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VolumeOff
 import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun BossMapScreen(
@@ -166,7 +168,7 @@ fun BossMapScreen(
                         .padding(vertical = 24.dp)
                 ) {
 
-                    Column {
+                    Column(modifier = Modifier.fillMaxSize()) {
 
                         Text(
                             text = "Menu",
@@ -179,15 +181,6 @@ fun BossMapScreen(
 
                         DrawerItem(
                             title = "Home",
-                            selected = selectedItem == "Home",
-                            onClick = {
-                                selectedItem = "Home"
-                                drawerVisible = false
-                            }
-                        )
-
-                        DrawerItem(
-                            title = "Chapters",
                             selected = selectedItem == "Chapters",
                             onClick = {
                                 selectedItem = "Chapters"
@@ -196,11 +189,41 @@ fun BossMapScreen(
                         )
 
                         DrawerItem(
-                            title = "Settings",
-                            selected = selectedItem == "Settings",
+                            title = "Profile",
+                            selected = false,
                             onClick = {
-                                selectedItem = "Settings"
                                 drawerVisible = false
+                                navController.navigate("profile_setup")
+                            }
+                        )
+                        DrawerItem(
+                            title = "Home",
+                            selected = false,
+                            onClick = {
+                                drawerVisible = false
+//                                navController.navigate("home")
+                            }
+                        )
+//                        DrawerItem(
+//                            title = "LeaderBoard",
+//                            selected = false,
+//                            onClick = {
+//                                drawerVisible = false
+//                                navController.navigate("leader_Board")
+//                            }
+//                        )
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        DrawerItem(
+                            title = "Logout",
+                            selected = false,
+                            icon = Icons.Default.Logout,
+                            onClick = {
+                                FirebaseAuth.getInstance().signOut()
+                                drawerVisible = false
+                                navController.navigate(Screen.Login.route) {
+                                    popUpTo(0) { inclusive = true }
+                                }
                             }
                         )
                     }
@@ -221,6 +244,7 @@ fun BossMapScreen(
 fun DrawerItem(
     title: String,
     selected: Boolean,
+    icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
     onClick: () -> Unit
 ) {
     Box(
@@ -234,11 +258,22 @@ fun DrawerItem(
             .clickable { onClick() }
             .padding(14.dp)
     ) {
-        Text(
-            text = title,
-            fontSize = 16.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-            color = if (selected) Color(0xFF7B9ACC) else Color.DarkGray
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = if (selected) Color(0xFF7B9ACC) else Color.DarkGray,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+            Text(
+                text = title,
+                fontSize = 16.sp,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                color = if (selected) Color(0xFF7B9ACC) else Color.DarkGray
+            )
+        }
     }
 }
