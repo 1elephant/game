@@ -180,7 +180,7 @@ fun BossMapScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         DrawerItem(
-                            title = "Home",
+                            title = "Chapters",
                             selected = selectedItem == "Chapters",
                             onClick = {
                                 selectedItem = "Chapters"
