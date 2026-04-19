@@ -14,10 +14,11 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
+        google()        // 🔥 MUST HAVE
         mavenCentral()
     }
 }
 
-rootProject.name = "Kotlify MAD app"
+rootProject.name = "game"
 include(":app")
+ 

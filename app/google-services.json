@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "223046843959",
+    "project_id": "colve-f6281",
+    "storage_bucket": "colve-f6281.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223046843959:android:cbc4bb03b431d6f4f149b2",
+        "android_client_info": {
+          "package_name": "com.example.game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRJgvEX2JhoobzNZ2d9rAZrDkLGNv49eQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
