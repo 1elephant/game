@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 class QuizViewModel : ViewModel() {
 
@@ -29,7 +30,7 @@ class QuizViewModel : ViewModel() {
         }
 
         progress = progress.copy(scores = updated)
-        saveProgressToFirestore()
+        saveAllToFirestore()
     }
 
     var learningScores by mutableStateOf(
@@ -44,27 +45,35 @@ class QuizViewModel : ViewModel() {
         learningScores = learningScores.toMutableMap().apply {
             this[key] = maxOf(current, score)
         }
-        saveLearningScoresToFirestore()
+        saveAllToFirestore()
     }
 
-    private fun saveProgressToFirestore() {
-        val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid)
-            .update("bossScores", progress.scores)
-            .addOnFailureListener {
-                db.collection("users").document(uid)
-                    .set(mapOf("bossScores" to progress.scores), com.google.firebase.firestore.SetOptions.merge())
-            }
+    private fun calculateTotalPoints(): Int {
+        // 🎯 Boss levels: 3 points per mark
+        val bossTotal = progress.scores.sum() * 3
+        
+        // 🎯 Learning levels: 1 point per mark
+        val learningTotal = learningScores.values.sum()
+        
+        return bossTotal + learningTotal
     }
 
-    private fun saveLearningScoresToFirestore() {
+    private fun saveAllToFirestore() {
         val uid = auth.currentUser?.uid ?: return
-        val data = learningScores.mapKeys { "${it.key.first}_${it.key.second}" }
+        val totalPoints = calculateTotalPoints()
+        
+        val learningData = learningScores.mapKeys { "${it.key.first}_${it.key.second}" }
+        
+        val data = hashMapOf(
+            "bossScores" to progress.scores,
+            "learningScores" to learningData,
+            "totalPoints" to totalPoints
+        )
+
         db.collection("users").document(uid)
-            .update("learningScores", data)
-            .addOnFailureListener {
-                db.collection("users").document(uid)
-                    .set(mapOf("learningScores" to data), com.google.firebase.firestore.SetOptions.merge())
+            .set(data, SetOptions.merge())
+            .addOnFailureListener { e ->
+                Log.e("QUIZ_VM", "Error saving data", e)
             }
     }
 
@@ -73,11 +82,13 @@ class QuizViewModel : ViewModel() {
         db.collection("users").document(uid).get()
             .addOnSuccessListener { doc ->
                 if (doc.exists()) {
+                    // 1. Load Boss Scores
                     val bossScores = doc.get("bossScores") as? List<*>
                     if (bossScores != null) {
                         progress = BossProgress(bossScores.filterIsInstance<Number>().map { it.toInt() })
                     }
 
+                    // 2. Load Learning Scores
                     val lScores = doc.get("learningScores") as? Map<*, *>
                     if (lScores != null) {
                         val converted = mutableMapOf<Pair<Int, Difficulty>, Int>()
@@ -95,11 +106,24 @@ class QuizViewModel : ViewModel() {
                         }
                         learningScores = converted
                     }
+                    
+                    // 3. 🚀 CRITICAL FIX: Recalculate total points locally if it's 0 or missing in Firestore
+                    val firestorePoints = (doc.get("totalPoints") as? Number)?.toInt() ?: 0
+                    val currentCalculated = calculateTotalPoints()
+                    
+                    if (firestorePoints != currentCalculated && currentCalculated > 0) {
+                        saveAllToFirestore() // Sync it back to Firestore correctly
+                    }
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("QUIZ_VM", "Error loading user data", e)
             }
+    }
+    
+    fun clearData() {
+        progress = BossProgress()
+        learningScores = mutableMapOf()
     }
 }
 
@@ -136,5 +160,12 @@ class AppViewModel : ViewModel() {
                 Log.e("PROFILE_LOAD", "Failed to load", e)
                 onComplete(false, e.message)
             }
+    }
+    
+    fun clearData() {
+        userEmail = ""
+        userName = ""
+        userUsername = ""
+        userEmoji = "😀"
     }
 }

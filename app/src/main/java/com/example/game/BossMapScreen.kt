@@ -16,6 +16,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VolumeOff
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +45,7 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun BossMapScreen(
     appViewModel:AppViewModel,
+    quizViewModel: QuizViewModel, // Added quizViewModel
     progress: BossProgress,
     navController: NavController
 ) {
@@ -50,7 +55,7 @@ fun BossMapScreen(
 
     var drawerVisible by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("Chapters") }
-//    var isSoundOn by remember { mutableStateOf(true) }
+
     MusicPlayer(isSoundOn,R.raw.sapphire)
 
     val titles = listOf(
@@ -180,7 +185,18 @@ fun BossMapScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         DrawerItem(
+                            title = "Home",
+                            selected = selectedItem == "Home",
+                            icon = Icons.Default.Home,
+                            onClick = {
+                                selectedItem = "Home"
+                                drawerVisible = false
+                            }
+                        )
+
+                        DrawerItem(
                             title = "Chapters",
+                            icon = Icons.Default.MenuBook,
                             selected = selectedItem == "Chapters",
                             onClick = {
                                 selectedItem = "Chapters"
@@ -190,28 +206,24 @@ fun BossMapScreen(
 
                         DrawerItem(
                             title = "Profile",
+                            icon= Icons.Default.Person,
                             selected = false,
                             onClick = {
                                 drawerVisible = false
                                 navController.navigate("profile_setup")
                             }
                         )
+
                         DrawerItem(
-                            title = "Home",
+                            title = "LeaderBoard",
                             selected = false,
+                            icon = Icons.Default.Leaderboard,
                             onClick = {
                                 drawerVisible = false
-//                                navController.navigate("home")
+                                navController.navigate(Screen.Leaderboard.route)
                             }
                         )
-//                        DrawerItem(
-//                            title = "LeaderBoard",
-//                            selected = false,
-//                            onClick = {
-//                                drawerVisible = false
-//                                navController.navigate("leader_Board")
-//                            }
-//                        )
+
                         Spacer(modifier = Modifier.weight(1f))
 
                         DrawerItem(
@@ -220,6 +232,9 @@ fun BossMapScreen(
                             icon = Icons.Default.Logout,
                             onClick = {
                                 FirebaseAuth.getInstance().signOut()
+                                // ✅ Clear data on logout
+                                appViewModel.clearData()
+                                quizViewModel.clearData()
                                 drawerVisible = false
                                 navController.navigate(Screen.Login.route) {
                                     popUpTo(0) { inclusive = true }

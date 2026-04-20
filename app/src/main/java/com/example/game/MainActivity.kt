@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screen.SplashScreen.route
                 ) {
 
-                    // 🔹 SPLASH
                     composable(Screen.SplashScreen.route) {
                         SplashScreen {
                             navController.navigate(Screen.Login.route) {
@@ -52,7 +51,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    // 🔹 LOGIN
                     composable(Screen.Login.route) {
                         var navTriggered by remember { mutableStateOf(false) }
 
@@ -66,35 +64,24 @@ class MainActivity : ComponentActivity() {
                                     appViewModel.loadProfile { hasProfile, error ->
                                         if (!navTriggered) {
                                             navTriggered = true
-                                            
-                                            if (error != null) {
-                                                // Show the user the actual error (like PERMISSION_DENIED)
-                                                Toast.makeText(context, "Database Error: $error", Toast.LENGTH_LONG).show()
-                                                // Default to setup to let them try to save again
-                                                navController.navigate("profile_setup") {
+                                            quizViewModel.loadUserData()
+                                            if (hasProfile) {
+                                                navController.navigate(Screen.BossMapScreen.route) {
                                                     popUpTo(Screen.Login.route) { inclusive = true }
                                                 }
                                             } else {
-                                                quizViewModel.loadUserData()
-                                                if (hasProfile) {
-                                                    navController.navigate(Screen.BossMapScreen.route) {
-                                                        popUpTo(Screen.Login.route) { inclusive = true }
-                                                    }
-                                                } else {
-                                                    navController.navigate("profile_setup") {
-                                                        popUpTo(Screen.Login.route) { inclusive = true }
-                                                    }
+                                                navController.navigate("profile_setup") {
+                                                    popUpTo(Screen.Login.route) { inclusive = true }
                                                 }
                                             }
                                         }
                                     }
                                 }
                                 
-                                delay(4000) // Safety timeout
+                                delay(3500)
                                 if (!navTriggered) {
                                     navTriggered = true
                                     profileJob.cancel()
-                                    Toast.makeText(context, "Connection timeout. Try Profile Setup.", Toast.LENGTH_SHORT).show()
                                     navController.navigate("profile_setup") {
                                         popUpTo(Screen.Login.route) { inclusive = true }
                                     }
@@ -103,16 +90,21 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    // 🔹 BOSS MAP
                     composable(Screen.BossMapScreen.route) {
                         BossMapScreen(
                             appViewModel = appViewModel,
+                            quizViewModel = quizViewModel, // ✅ Added quizViewModel
                             progress = progress,
                             navController = navController
                         )
                     }
 
-                    // 🔹 PROFILE SETUP
+                    composable(Screen.Leaderboard.route) {
+                        LeaderboardScreen(
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+
                     composable("profile_setup") {
                         ProfileSetupScreen(
                             appViewModel = appViewModel,
@@ -125,7 +117,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // 🔹 DIFFICULTY
                     composable(Screen.Difficulty.route) { backStackEntry ->
                         val chapter = backStackEntry.arguments?.getString("chapter")?.toIntOrNull() ?: 1
                         DifficultyScreen(
@@ -136,7 +127,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // 🔹 LEARNING QUIZ
                     composable(Screen.LearningQuiz.route) { backStackEntry ->
                         val chapter = backStackEntry.arguments?.getString("chapter")?.toIntOrNull() ?: 1
                         val difficultyString = backStackEntry.arguments?.getString("difficulty") ?: "EASY"
@@ -161,7 +151,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    // 🔹 MAIN QUIZ
                     composable(Screen.QuizMain.route) { backStackEntry ->
                         val level = backStackEntry.arguments?.getString("level")?.toIntOrNull() ?: 1
                         val questions = QuestionBank.getQuestions(level)
