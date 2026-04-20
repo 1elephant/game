@@ -104,7 +104,7 @@ object QuestionBank {
                     0
                 ),
                 Question.FillBlank(
-                    "@Composable\nfun Test() {\n    val count = remember { \n        mutableStateOf(0) \n    }\n\n    Button(onClick = { count.value++ }) {\n        Text(\"\${count.value}\")\n    }\n}\n\n// count is updated because state is ___",
+                    "@Composable\nfun Test() {\n    val count = remember { \n        mutableStateOf(0) \n    }\n\n    Button(onClick = { count.value++ }) {\n        Text(\"\${count.value}\")\n    }\n}\n// count is updated because state is ___",
                     listOf("observable")
                 )
             )
@@ -141,20 +141,11 @@ data class LearningLevel(
 
 object LearningQuestionBank {
     val levels = listOf(
-<<<<<<< HEAD
-=======
-
         // --- CHAPTER 1: KOTLIN BASICS ---
->>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
         LearningLevel(
             chapter = 1,
             difficulty = Difficulty.EASY,
             questions = listOf(
-<<<<<<< HEAD
-                Question.MCQ("What is Kotlin?", listOf("Language", "OS", "IDE"), 0),
-                Question.FillBlank("Kotlin is developed by ___", listOf("JetBrains"))
-            )
-=======
                 Question.MCQ("What keyword is used to declare a variable in Kotlin?", listOf("val","varr","let","define"), 0),
                 Question.MCQ("Which keyword defines a function?", listOf("fun","def","function","lambda"), 0),
                 Question.MCQ("What is Kotlin primarily used for?", listOf("Mobile App Development","Gaming Engine","Hardware Design","Networking"), 0)
@@ -233,7 +224,6 @@ object LearningQuestionBank {
             questions = listOf(
                 Question.FillBlank("var count by remember { ___(0) }", listOf("mutableStateOf")),
                 Question.FillBlank("val name = remember { ___(\"Kotlin\") }", listOf("mutableStateOf")),
-                // Adjusted to match her model logic
                 Question.FillBlank("count.___()", listOf("toString"))
             )
         ),
@@ -262,11 +252,9 @@ object LearningQuestionBank {
             difficulty = Difficulty.HARD,
             questions = listOf(
                 Question.FillBlank("delay(___)", listOf("1000")),
-                // Updated to match her syntax
                 Question.FillBlank("api.___()", listOf("getData")),
                 Question.FillBlank("@Database(... version = ___)", listOf("1"))
             )
->>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
         )
     )
 

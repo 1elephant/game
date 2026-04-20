@@ -1,7 +1,7 @@
 package com.example.game
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-<<<<<<< HEAD
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,25 +13,33 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Settings
-=======
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
->>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-// We do NOT define colors here again because they are already in QuizScreen.kt
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun ScoreScreen(score: Int, total: Int, onRestart: () -> Unit) {
-    val percentage = if (total > 0) (score * 100) / total else 0
-
-<<<<<<< HEAD
+fun MCQView(
+    mcq: Question.MCQ,
+    currentQuestion: Int,
+    totalQuestions: Int,
+    onAnswerSelected: (Boolean) -> Unit,
+) {
+    var selectedIndex by remember(currentQuestion) { mutableStateOf<Int?>(null) }
+    var answered by remember(currentQuestion) { mutableStateOf(false) }
     var showFeedback by remember(currentQuestion) { mutableStateOf(false) }
     var isCorrectAnswer by remember(currentQuestion) { mutableStateOf(false) }
 
@@ -43,55 +51,34 @@ fun ScoreScreen(score: Int, total: Int, onRestart: () -> Unit) {
         (currentQuestion + 1).toFloat() / totalQuestions
     else 0f
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFfde2e4))
-=======
-    Column(
-        modifier = Modifier.fillMaxSize().background(BackgroundPink), // Uses color from QuizScreen.kt
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
->>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
-    ) {
-        Text("🎉 Great Job!", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DarkText)
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = CardPink)
-        ) {
-            Column(
-                modifier = Modifier.padding(30.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFfde2e4))) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            // 🔹 Top Bar
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-<<<<<<< HEAD
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color(0xFF7B9ACC))
                 Text("MCQ Question", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF7B9ACC))
                 Icon(Icons.Default.Settings, contentDescription = null, tint = Color(0xFF7B9ACC))
             }
 
-            // 🔹 Progress
+            // 🔹 Progress (Kept your requested Pink theme)
             LinearProgressIndicator(
                 progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(50)),
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(50)),
                 color = Color(0xFFFF758F),
                 trackColor = Color.White
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // 🔹 Question Card
+            // 🔹 Question Card (Left Aligned for code-feel)
             Card(
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFfad2e1)),
-                elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
+                modifier = Modifier.fillMaxWidth().wrapContentHeight()
             ) {
                 Box(modifier = Modifier.padding(24.dp)) {
                     Text(
@@ -107,7 +94,7 @@ fun ScoreScreen(score: Int, total: Int, onRestart: () -> Unit) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 🔹 Options Grid
+            // 🔹 Options Grid (Equal sized cards)
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -128,40 +115,32 @@ fun ScoreScreen(score: Int, total: Int, onRestart: () -> Unit) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(80.dp) // ✅ Fixed height for equal size
-                            .clickable(enabled = !answered) {
-                                selectedIndex = index
-                            },
+                            .height(80.dp)
+                            .clickable(enabled = !answered) { selectedIndex = index },
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = backgroundColor),
-                        elevation = CardDefaults.cardElevation(if (isSelected) 8.dp else 2.dp)
+                        colors = CardDefaults.cardColors(containerColor = backgroundColor)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize() // ✅ Fill size for centering
-                                .padding(12.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
+                        Box(modifier = Modifier.fillMaxSize().padding(12.dp), contentAlignment = Alignment.Center) {
                             Text(
                                 text = option,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = if (isSelected || answered) Color.White else Color(0xFF4A4E69),
-                                textAlign = TextAlign.Center // ✅ Centered text
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
                 }
-=======
-                Text("$percentage%", fontSize = 36.sp, fontWeight = FontWeight.Bold, color = DarkText)
-                Text("Score: $score / $total", color = DarkText)
->>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
-
-<<<<<<< HEAD
+        FloatingActionButton(
+            onClick = {
+                if (!answered && selectedIndex != null) {
+                    answered = true
+                    val isCorrect = mcq.isCorrect(selectedIndex!!)
+                    isCorrectAnswer = isCorrect
+                    showFeedback = true
                     scope.launch {
                         delay(1000)
                         showFeedback = false
@@ -169,13 +148,8 @@ fun ScoreScreen(score: Int, total: Int, onRestart: () -> Unit) {
                     }
                 }
             },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(24.dp),
-            containerColor = if (selectedIndex != null && !answered)
-                Color(0xFFFF758F)
-            else
-                Color.LightGray
+            modifier = Modifier.align(Alignment.BottomEnd).padding(24.dp),
+            containerColor = if (selectedIndex != null && !answered) Color(0xFFFF758F) else Color.LightGray
         ) {
             Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next", tint = Color.White)
         }
@@ -202,20 +176,12 @@ fun FillBlankView(
 
     val scope = rememberCoroutineScope()
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val progress = if (totalQuestions > 0) (currentQuestion + 1).toFloat() / totalQuestions else 0f
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFfde2e4))
-    ) {
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFfde2e4))) {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            // 🔹 Top Bar
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -224,29 +190,21 @@ fun FillBlankView(
                 Icon(Icons.Default.Settings, contentDescription = null, tint = Color(0xFF7B9ACC))
             }
 
-            // 🔹 Progress
             LinearProgressIndicator(
                 progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(50)),
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(50)),
                 color = Color(0xFFFF758F),
                 trackColor = Color.White
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 🔹 Question Content Card (Pink themed)
             Card(
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFfad2e1)),
-                elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
+                modifier = Modifier.fillMaxWidth().wrapContentHeight()
             ) {
-                Column(modifier = Modifier.padding(24.dp)) {
+                Column(modifier = Modifier.padding(20.dp)) {
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
@@ -254,57 +212,26 @@ fun FillBlankView(
                     ) {
                         val parts = question.question.split("___")
                         parts.forEachIndexed { index, part ->
-                            Text(
-                                text = part,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF4A4E69),
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                            
+                            Text(text = part, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color(0xFF4A4E69), modifier = Modifier.padding(vertical = 8.dp))
                             if (index < parts.lastIndex) {
                                 val text = answersState.getOrElse(index) { "" }
                                 var isFocused by remember(index) { mutableStateOf(false) }
-
-                                Column(
-                                    modifier = Modifier.padding(horizontal = 6.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
+                                Column(modifier = Modifier.padding(horizontal = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                                     BasicTextField(
                                         value = text,
-                                        onValueChange = { newValue ->
-                                            if (!answered) {
-                                                val newList = answersState.toMutableList()
-                                                newList[index] = newValue
-                                                answersState = newList
-                                            }
-                                        },
+                                        onValueChange = { newValue -> if (!answered) { val newList = answersState.toMutableList(); newList[index] = newValue; answersState = newList } },
                                         singleLine = true,
-                                        textStyle = TextStyle(
-                                            fontSize = 18.sp,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFFFF758F),
-                                            textAlign = TextAlign.Center
-                                        ),
+                                        textStyle = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFFFF758F), textAlign = TextAlign.Center),
                                         cursorBrush = SolidColor(Color(0xFFFF758F)),
-                                        modifier = Modifier
-                                            .width(IntrinsicSize.Min)
-                                            .widthIn(min = 70.dp, max = 150.dp)
-                                            .onFocusChanged { isFocused = it.isFocused }
+                                        modifier = Modifier.widthIn(min = 70.dp, max = 150.dp).onFocusChanged { isFocused = it.isFocused }
                                     )
-                                    Box(
-                                        modifier = Modifier
-                                            .width(70.dp)
-                                            .height(3.dp)
-                                            .background(if (isFocused) Color(0xFFFF758F) else Color(0xFF4A4E69).copy(alpha = 0.5f))
-                                    )
+                                    Box(modifier = Modifier.width(70.dp).height(3.dp).background(if (isFocused) Color(0xFFFF758F) else Color(0xFF4A4E69).copy(alpha = 0.5f)))
                                 }
                             }
                         }
                     }
                 }
             }
-            
             Spacer(modifier = Modifier.weight(1f))
         }
 
@@ -315,20 +242,11 @@ fun FillBlankView(
                     val isCorrect = question.isCorrect(answersState)
                     isCorrectAnswer = isCorrect
                     showFeedback = true
-                    scope.launch {
-                        delay(1000)
-                        showFeedback = false
-                        onAnswerSubmitted(isCorrect)
-                    }
+                    scope.launch { delay(1000); showFeedback = false; onAnswerSubmitted(isCorrect) }
                 }
             },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(24.dp),
-            containerColor = if (answersState.all { it.isNotBlank() } && !answered)
-                Color(0xFFFF758F)
-            else
-                Color.LightGray
+            modifier = Modifier.align(Alignment.BottomEnd).padding(24.dp),
+            containerColor = if (answersState.all { it.isNotBlank() } && !answered) Color(0xFFFF758F) else Color.LightGray
         ) {
             Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next", tint = Color.White)
         }
@@ -341,41 +259,11 @@ fun FillBlankView(
 
 @Composable
 fun FeedbackDialog(isCorrect: Boolean, screenWidth: androidx.compose.ui.unit.Dp) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.3f)),
-        contentAlignment = Alignment.Center
-    ) {
-        Card(
-            modifier = Modifier.size(screenWidth * 0.7f),
-            shape = RoundedCornerShape(20.dp),
-            elevation = CardDefaults.cardElevation(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(
-                        if (isCorrect) R.drawable.happy
-                        else R.drawable.wrong
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(screenWidth * 0.5f)
-                )
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
+        Card(modifier = Modifier.size(screenWidth * 0.7f), shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Image(painter = painterResource(if (isCorrect) R.drawable.happy else R.drawable.wrong), contentDescription = null, modifier = Modifier.size(screenWidth * 0.5f))
             }
         }
     }
 }
-=======
-        Button(
-            onClick = onRestart,
-            colors = ButtonDefaults.buttonColors(containerColor = FABPink)
-        ) {
-            Text("Play Again")
-        }
-    }
-}
->>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59

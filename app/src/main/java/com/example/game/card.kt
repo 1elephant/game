@@ -77,7 +77,7 @@ fun ScoreCard1(
 //    var isSoundOn by remember { mutableStateOf(true) }
     MusicPlayer(isSoundOn,R.raw.sapphire)
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(color=Color(0xFFFFCCD5))) {
 
         // 🔷 HEADER (Image + Top Bar together)
         Box(
