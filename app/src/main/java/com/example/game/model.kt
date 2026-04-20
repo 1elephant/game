@@ -141,13 +141,132 @@ data class LearningLevel(
 
 object LearningQuestionBank {
     val levels = listOf(
+<<<<<<< HEAD
+=======
+
+        // --- CHAPTER 1: KOTLIN BASICS ---
+>>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
         LearningLevel(
             chapter = 1,
             difficulty = Difficulty.EASY,
             questions = listOf(
+<<<<<<< HEAD
                 Question.MCQ("What is Kotlin?", listOf("Language", "OS", "IDE"), 0),
                 Question.FillBlank("Kotlin is developed by ___", listOf("JetBrains"))
             )
+=======
+                Question.MCQ("What keyword is used to declare a variable in Kotlin?", listOf("val","varr","let","define"), 0),
+                Question.MCQ("Which keyword defines a function?", listOf("fun","def","function","lambda"), 0),
+                Question.MCQ("What is Kotlin primarily used for?", listOf("Mobile App Development","Gaming Engine","Hardware Design","Networking"), 0)
+            )
+        ),
+        LearningLevel(
+            chapter = 1,
+            difficulty = Difficulty.MEDIUM,
+            questions = listOf(
+                Question.FillBlank("Kotlin is a ___ typed language", listOf("statically")),
+                Question.FillBlank("To make a variable mutable, we use ___", listOf("var")),
+                Question.FillBlank("Safe call operator in Kotlin is ___", listOf("?."))
+            )
+        ),
+        LearningLevel(
+            chapter = 1,
+            difficulty = Difficulty.HARD,
+            questions = listOf(
+                Question.FillBlank("___ add(a: Int, b: Int): Int { return a + b }", listOf("fun")),
+                Question.FillBlank("println(name___length)", listOf("?.")),
+                Question.FillBlank("data class User(val name: String, val ___: Int)", listOf("age"))
+            )
+        ),
+
+        // --- CHAPTER 2: UI & LAYOUTS ---
+        LearningLevel(
+            chapter = 2,
+            difficulty = Difficulty.EASY,
+            questions = listOf(
+                Question.MCQ("Which function is used to create UI in Compose?", listOf("@Composable","@UI","@Layout","@View"), 0),
+                Question.MCQ("Which layout arranges items vertically?", listOf("Column","Row","Box","Stack"), 0),
+                Question.MCQ("Which layout arranges items horizontally?", listOf("Row","Column","Box","Grid"), 0)
+            )
+        ),
+        LearningLevel(
+            chapter = 2,
+            difficulty = Difficulty.MEDIUM,
+            questions = listOf(
+                Question.FillBlank("To add spacing, we use ___", listOf("Spacer")),
+                Question.FillBlank("Modifier.___ fills screen", listOf("fillMaxSize")),
+                Question.FillBlank("Modifier.___ adds spacing", listOf("padding"))
+            )
+        ),
+        LearningLevel(
+            chapter = 2,
+            difficulty = Difficulty.HARD,
+            questions = listOf(
+                Question.FillBlank("Column(modifier = Modifier.___())", listOf("fillMaxSize")),
+                Question.FillBlank("Text(\"Hello\", modifier = Modifier.___(16.dp))", listOf("padding")),
+                Question.FillBlank("Arrangement.___ fills space between", listOf("SpaceBetween"))
+            )
+        ),
+
+        // --- CHAPTER 3: STATE & LOGIC ---
+        LearningLevel(
+            chapter = 3,
+            difficulty = Difficulty.EASY,
+            questions = listOf(
+                Question.MCQ("Which function stores state in Compose?", listOf("remember","save","store","keep"), 0),
+                Question.MCQ("Which keyword defines a class?", listOf("class","object","define","struct"), 0),
+                Question.MCQ("Which keyword creates singleton?", listOf("object","class","static","final"), 0)
+            )
+        ),
+        LearningLevel(
+            chapter = 3,
+            difficulty = Difficulty.MEDIUM,
+            questions = listOf(
+                Question.FillBlank("State is stored using ___", listOf("remember")),
+                Question.FillBlank("Mutable state is created using ___", listOf("mutableStateOf")),
+                Question.FillBlank("ViewModel manages ___", listOf("UI state"))
+            )
+        ),
+        LearningLevel(
+            chapter = 3,
+            difficulty = Difficulty.HARD,
+            questions = listOf(
+                Question.FillBlank("var count by remember { ___(0) }", listOf("mutableStateOf")),
+                Question.FillBlank("val name = remember { ___(\"Kotlin\") }", listOf("mutableStateOf")),
+                // Adjusted to match her model logic
+                Question.FillBlank("count.___()", listOf("toString"))
+            )
+        ),
+
+        // --- CHAPTER 4: REAL APP DEV ---
+        LearningLevel(
+            chapter = 4,
+            difficulty = Difficulty.EASY,
+            questions = listOf(
+                Question.MCQ("Coroutines are used for:", listOf("Async tasks","UI design","Storage","Layout"), 0),
+                Question.MCQ("Which is used for API calls?", listOf("Retrofit","Room","Glide","Compose"), 0),
+                Question.MCQ("Which is used for local storage?", listOf("Room","Retrofit","Firebase","UI"), 0)
+            )
+        ),
+        LearningLevel(
+            chapter = 4,
+            difficulty = Difficulty.MEDIUM,
+            questions = listOf(
+                Question.FillBlank("Coroutine scope is ___", listOf("CoroutineScope")),
+                Question.FillBlank("API calls run on ___ thread", listOf("background")),
+                Question.FillBlank("Room is used for ___ storage", listOf("local"))
+            )
+        ),
+        LearningLevel(
+            chapter = 4,
+            difficulty = Difficulty.HARD,
+            questions = listOf(
+                Question.FillBlank("delay(___)", listOf("1000")),
+                // Updated to match her syntax
+                Question.FillBlank("api.___()", listOf("getData")),
+                Question.FillBlank("@Database(... version = ___)", listOf("1"))
+            )
+>>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
         )
     )
 

@@ -1,7 +1,7 @@
 package com.example.game
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+<<<<<<< HEAD
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,34 +13,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Settings
+=======
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+>>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
+// We do NOT define colors here again because they are already in QuizScreen.kt
 
 @Composable
-fun MCQView(
-    mcq: Question.MCQ,
-    currentQuestion: Int,
-    totalQuestions: Int,
-    onAnswerSelected: (Boolean) -> Unit,
-) {
-    var selectedIndex by remember(currentQuestion) { mutableStateOf<Int?>(null) }
-    var answered by remember(currentQuestion) { mutableStateOf(false) }
+fun ScoreScreen(score: Int, total: Int, onRestart: () -> Unit) {
+    val percentage = if (total > 0) (score * 100) / total else 0
 
+<<<<<<< HEAD
     var showFeedback by remember(currentQuestion) { mutableStateOf(false) }
     var isCorrectAnswer by remember(currentQuestion) { mutableStateOf(false) }
 
@@ -56,20 +47,25 @@ fun MCQView(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFfde2e4))
+=======
+    Column(
+        modifier = Modifier.fillMaxSize().background(BackgroundPink), // Uses color from QuizScreen.kt
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+>>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
+        Text("🎉 Great Job!", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = DarkText)
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = CardPink)
         ) {
-            // 🔹 Top Bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier.padding(30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+<<<<<<< HEAD
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color(0xFF7B9ACC))
                 Text("MCQ Question", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF7B9ACC))
                 Icon(Icons.Default.Settings, contentDescription = null, tint = Color(0xFF7B9ACC))
@@ -156,17 +152,16 @@ fun MCQView(
                         }
                     }
                 }
+=======
+                Text("$percentage%", fontSize = 36.sp, fontWeight = FontWeight.Bold, color = DarkText)
+                Text("Score: $score / $total", color = DarkText)
+>>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
             }
         }
 
-        FloatingActionButton(
-            onClick = {
-                if (!answered && selectedIndex != null) {
-                    answered = true
-                    val isCorrect = mcq.isCorrect(selectedIndex!!)
-                    isCorrectAnswer = isCorrect
-                    showFeedback = true
+        Spacer(modifier = Modifier.height(30.dp))
 
+<<<<<<< HEAD
                     scope.launch {
                         delay(1000)
                         showFeedback = false
@@ -374,3 +369,13 @@ fun FeedbackDialog(isCorrect: Boolean, screenWidth: androidx.compose.ui.unit.Dp)
         }
     }
 }
+=======
+        Button(
+            onClick = onRestart,
+            colors = ButtonDefaults.buttonColors(containerColor = FABPink)
+        ) {
+            Text("Play Again")
+        }
+    }
+}
+>>>>>>> 1319c9c45022bc04ecf85a9a2d63e2d21ea7ad59
