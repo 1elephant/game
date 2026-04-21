@@ -162,10 +162,147 @@ fun StylishLevelCard(title: String, subtitle: String, onClick: () -> Unit) {
 @Composable
 fun TheoryScreenContent(chapter: String, onBack: () -> Unit) {
     val (title, content) = when (chapter) {
-        "1" -> "Kotlin Basics" to "Kotlin is a modern, concise, and safe programming language used mainly for Android development. It reduces boilerplate code compared to Java and provides built-in safety features like null handling. \n\nKotlin programs start from a main() function, and variables can be declared using val (immutable) and var (mutable). \n\nOne of Kotlin’s most important features is null safety, which helps prevent crashes caused by null values. A variable cannot hold null unless explicitly declared nullable using ?. Kotlin also provides safe operators like ?., ?:, and !!.\n\nData classes are used to store data efficiently. They automatically generate useful methods like toString(), equals(), and copy()."
-        "2" -> "UI & Layouts" to "In modern Android development, Jetpack Compose is used to build UI declaratively. Instead of XML layouts, UI is written using Kotlin functions called @Composable. This makes UI more readable and easier to manage.\n\nCompose provides layout components like Column, Row, and Box to arrange UI elements. You can also make scrollable layouts using Modifier.verticalScroll() or LazyColumn for large lists.\n\nDrawables and styling are handled using modifiers such as background(), padding(), and size()."
-        "3" -> "State & Logic" to "In Compose, UI is driven by state. Whenever state changes, the UI automatically recomposes (updates). This is a key concept called declarative UI.\n\nThe remember function is used to store state within a composable so it survives recomposition. For larger apps, we use a ViewModel, which holds UI-related data and survives configuration changes like screen rotation.\n\nState can be managed using mutableStateOf() and observed directly in UI. Kotlin objects can be used to create singletons for shared logic."
-        "4" -> "App Architecture" to "Real Android apps require handling background tasks, APIs, data storage, and structured architecture.\n\nCoroutines are used for asynchronous programming. They allow tasks like network calls to run in the background without blocking the UI. launch and suspend functions are commonly used.\n\nFor API calls, libraries like Retrofit are used to fetch data from the internet. Modern apps follow architecture patterns like MVVM (Model-View-ViewModel), where:\n\nModel -> Data layer\nView -> UI (Compose)\nViewModel -> Logic & state"
+        "1" -> "Kotlin Basics" to """
+Kotlin is a modern, concise, and safe programming language used mainly for Android development. It reduces boilerplate code compared to Java and provides built-in safety features like null handling. Kotlin programs start from a main() function, and variables can be declared using val (immutable) and var (mutable). Type inference allows Kotlin to automatically detect variable types.
+
+One of Kotlin’s most important features is null safety, which helps prevent crashes caused by null values. A variable cannot hold null unless explicitly declared nullable using ?. Kotlin also provides safe operators like ?., ?:, and !!.
+
+Functions in Kotlin are first-class citizens and can be written in a concise way. You can define default parameters and even write single-line functions.
+
+Data classes are used to store data efficiently. They automatically generate useful methods like toString(), equals(), and copy().
+
+Example:
+
+fun main() {
+    val name: String = "Drishti"
+    var age: Int = 18
+
+    // Nullable variable
+    var city: String? = null
+
+    println(city?.length)   // Safe call
+    println(city ?: "No City") // Elvis operator
+
+    greet(name)
+}
+
+fun greet(name: String) {
+    println("Hello ${'$'}name")
+}
+
+// Data class
+data class User(val name: String, val age: Int)
+
+val user1 = User("Drishti", 18)
+        """.trimIndent()
+
+        "2" -> "UI & Layouts" to """
+In modern Android development, Jetpack Compose is used to build UI declaratively. Instead of XML layouts, UI is written using Kotlin functions called @Composable. This makes UI more readable and easier to manage.
+
+Compose provides layout components like Column, Row, and Box to arrange UI elements. You can also make scrollable layouts using Modifier.verticalScroll() or LazyColumn for large lists.
+
+Drawables and styling are handled using modifiers such as background(), padding(), and size().
+
+Example:
+
+@Composable
+fun MyUI() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Hello World")
+
+        Row {
+            Text("Item 1")
+            Text("Item 2")
+        }
+    }
+}
+
+Scrollable List:
+
+@Composable
+fun ListUI() {
+    LazyColumn {
+        items(10) {
+            Text("Item ${'$'}it", modifier = Modifier.padding(8.dp))
+        }
+    }
+}
+        """.trimIndent()
+
+        "3" -> "State & Logic" to """
+In Compose, UI is driven by state. Whenever state changes, the UI automatically recomposes (updates). This is a key concept called declarative UI.
+
+The remember function is used to store state within a composable so it survives recomposition. For larger apps, we use a ViewModel, which holds UI-related data and survives configuration changes like screen rotation.
+
+State can be managed using mutableStateOf() and observed directly in UI. Kotlin objects can be used to create singletons for shared logic.
+
+Example:
+
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Count: ${'$'}count")
+        Button(onClick = { count++ }) {
+            Text("Increase")
+        }
+    }
+}
+
+ViewModel Example:
+
+class MyViewModel : ViewModel() {
+    var count = mutableStateOf(0)
+
+    fun increment() {
+        count.value++
+    }
+}
+        """.trimIndent()
+
+        "4" -> "App Architecture" to """
+Real Android apps require handling background tasks, APIs, data storage, and structured architecture.
+
+Coroutines are used for asynchronous programming. They allow tasks like network calls to run in the background without blocking the UI. launch and suspend functions are commonly used.
+
+For API calls, libraries like Retrofit are used to fetch data from the internet. Data storage can be handled using SharedPreferences, Room Database, or DataStore.
+
+Modern apps follow architecture patterns like MVVM (Model-View-ViewModel), where:
+Model → Data layer
+View → UI (Compose)
+ViewModel → Logic & state
+
+Coroutine Example:
+
+fun fetchData() {
+    CoroutineScope(Dispatchers.IO).launch {
+        val data = getDataFromAPI()
+        println(data)
+    }
+}
+
+suspend fun getDataFromAPI(): String {
+    return "Data loaded"
+}
+
+Simple MVVM Flow:
+
+class MyViewModel : ViewModel() {
+    var data = mutableStateOf("Loading...")
+
+    fun loadData() {
+        viewModelScope.launch {
+            data.value = getDataFromAPI()
+        }
+    }
+}
+        """.trimIndent()
+
         else -> "Chapter Content" to "Ready to learn more?"
     }
 
@@ -185,7 +322,7 @@ fun TheoryScreenContent(chapter: String, onBack: () -> Unit) {
         }
 
         Column(modifier = Modifier.padding(20.dp)) {
-            Text(text = "Chapter $chapter", fontSize = 14.sp, color = Color.Gray)
+            Text(text = "Chapter $chapter", fontSize = 14.sp, color = Color(0.5f, 0.5f, 0.5f, 1f))
             Text(text = title, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E3A59))
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -197,7 +334,7 @@ fun TheoryScreenContent(chapter: String, onBack: () -> Unit) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(modifier = Modifier.padding(24.dp).verticalScroll(rememberScrollState())) {
-                    Text(text = content, fontSize = 18.sp, lineHeight = 28.sp, color = Color(0xFF4A4E69))
+                    Text(text = content, fontSize = 16.sp, lineHeight = 24.sp, color = Color(0xFF4A4E69))
                 }
             }
         }
