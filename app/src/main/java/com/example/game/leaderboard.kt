@@ -217,13 +217,13 @@ fun LeaderboardScreen(
                     }
                 }
 
-                // Full Rank List
+                // Top 5 Rank List
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 20.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     contentPadding = PaddingValues(bottom = 30.dp)
                 ) {
-                    itemsIndexed(users) { index, user ->
+                    itemsIndexed(users.take(5)) { index, user ->
                         RankListItem(user, index + 1, primaryBlue, user.id == currentUserId)
                     }
                 }

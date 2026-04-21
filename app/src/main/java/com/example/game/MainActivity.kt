@@ -139,13 +139,14 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // 🔹 SCORE SCREEN (Using your ScoreCard1 from card.kt)
+                    // 🔹 SCORE SCREEN
                     composable("score_screen/{score}/{total}") { backStackEntry ->
                         val score = backStackEntry.arguments?.getString("score")?.toIntOrNull() ?: 0
                         val total = backStackEntry.arguments?.getString("total")?.toIntOrNull() ?: 0
 
                         ScoreCard1(
                             appViewModel = appViewModel,
+                            navController = navController, // ✅ FIXED: Passed missing parameter
                             totalQuestions = total,
                             correctAnswers = score
                         )
@@ -170,8 +171,10 @@ class MainActivity : ComponentActivity() {
                                 level = chapter,
                                 onQuizFinished = { _, score ->
                                     quizViewModel.submitLearningScore(chapter, difficulty, score)
-                                    // Navigate to your ScoreCard
-                                    navController.navigate("score_screen/$score/${questions.size}")
+                                    // ✅ FIX: Remove quiz from backstack when moving to scorecard
+                                    navController.navigate("score_screen/$score/${questions.size}") {
+                                        popUpTo(Screen.LearningQuiz.route) { inclusive = true }
+                                    }
                                 }
                             )
                         }
@@ -191,8 +194,10 @@ class MainActivity : ComponentActivity() {
                                 level = level,
                                 onQuizFinished = { lvl, score ->
                                     quizViewModel.submitScore(lvl, score)
-                                    // Navigate to your ScoreCard
-                                    navController.navigate("score_screen/$score/${questions.size}")
+                                    // ✅ FIX: Remove quiz from backstack when moving to scorecard
+                                    navController.navigate("score_screen/$score/${questions.size}") {
+                                        popUpTo(Screen.QuizMain.route) { inclusive = true }
+                                    }
                                 }
                             )
                         }

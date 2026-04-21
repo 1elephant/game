@@ -29,7 +29,7 @@ fun SplashScreen(onNavigate: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo1), // your map image
+            painter = painterResource(id = R.drawable.logo4), // your map image
             contentDescription = null,
             modifier = Modifier.fillMaxSize()
         )

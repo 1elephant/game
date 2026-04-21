@@ -1,6 +1,7 @@
 package com.example.game
 import android.media.MediaPlayer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.PlayArrow
 import android.widget.Toast
@@ -56,9 +57,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+
 @Composable
 fun ScoreCard1(
     appViewModel: AppViewModel,
+    navController: NavController,
     totalQuestions: Int,
     correctAnswers: Int
 ) {
@@ -74,19 +77,18 @@ fun ScoreCard1(
         percentage >= 30 -> 1
         else -> 0
     }
-//    var isSoundOn by remember { mutableStateOf(true) }
+
     MusicPlayer(isSoundOn,R.raw.sapphire)
 
     Box(modifier = Modifier.fillMaxSize().background(color=Color(0xFFFFCCD5))) {
 
-        // 🔷 HEADER (Image + Top Bar together)
+        // 🔷 HEADER
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(screenHeight*0.3f)
         ) {
 
-            // 🖼️ Background Image
             Image(
                 painter = painterResource(id = R.drawable.pink2),
                 contentDescription = null,
@@ -94,7 +96,6 @@ fun ScoreCard1(
                 modifier = Modifier.matchParentSize()
             )
 
-            // 🌫️ Light pink overlay
             Box(
                 modifier = Modifier
                     .matchParentSize()
@@ -105,16 +106,19 @@ fun ScoreCard1(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 20.dp)
+                    .padding(horizontal = 12.dp, vertical = 40.dp)
                     .align(Alignment.TopCenter),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                IconButton(onClick = { }) {
+                // ✅ Go back to the previous screen (Difficulty/Map)
+                IconButton(onClick = { 
+                    navController.popBackStack()
+                }) {
                     Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = null,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
                         tint = Color(0xFF7B9ACC)
                     )
                 }
@@ -122,23 +126,16 @@ fun ScoreCard1(
                 Text(
                     text = "Score Card",
                     color = Color(0xFF7B9ACC),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
                 )
 
-                IconButton(onClick = {
-                    appViewModel.isSoundOn = !appViewModel.isSoundOn
-                    }
-                ) {
+                IconButton(onClick = { appViewModel.isSoundOn = !appViewModel.isSoundOn }) {
                     Icon(
-                        imageVector = if (isSoundOn)
-                            Icons.Default.VolumeUp
-                        else
-                            Icons.Default.VolumeOff,
+                        imageVector = if (isSoundOn) Icons.Default.VolumeUp else Icons.Default.VolumeOff,
                         contentDescription = "Sound Toggle",
                         tint = Color(0xFF7B9ACC),
-
-                        )
+                    )
                 }
             }
         }
@@ -147,7 +144,7 @@ fun ScoreCard1(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 180.dp),
+                .padding(top = screenHeight * 0.22f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -174,23 +171,20 @@ fun ScoreCard1(
             Row {
                 repeat(3) { index ->
                     Icon(
-                        imageVector = if (index < stars)
-                            Icons.Default.Star
-                        else
-                            Icons.Default.StarBorder,
+                        imageVector = if (index < stars) Icons.Default.Star else Icons.Default.StarBorder,
                         contentDescription = null,
                         tint = Color(0xFFFFC107),
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(32.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // 📊 Stats
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 20.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -199,23 +193,28 @@ fun ScoreCard1(
                 StatItem("Total", totalQuestions.toString())
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // 💬 Message
             Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFCF8F8)),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(2.dp),
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 30.dp)
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = if (percentage >= 80) "Excellent work!"
-                    else if (percentage >= 50) "Good job!"
-                    else "Keep practicing!",
-                    modifier = Modifier.padding(16.dp),
+                    text = when {
+                        percentage >= 80 -> "Master of Kotlin! 🏆"
+                        percentage >= 50 -> "Well Played! Keep it up! ✨"
+                        else -> "Good Effort! Let's try again! 💪"
+                    },
+                    modifier = Modifier.padding(20.dp),
                     textAlign = TextAlign.Center,
-                    fontSize = 16.sp
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 17.sp,
+                    color = Color(0xFF7B9ACC)
                 )
             }
         }

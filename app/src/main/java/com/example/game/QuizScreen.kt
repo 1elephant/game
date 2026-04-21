@@ -14,12 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// 🎨 COLORS (Only defined here to avoid conflicts)
+// 🎨 COLORS
 val BackgroundPink = Color(0xFFFFE1E9)
 val CardPink = Color(0xFFF9C5D5)
 val DarkText = Color(0xFF3E4E88)
@@ -66,7 +67,7 @@ fun QuizScreen(
         LinearProgressIndicator(
             progress = { (index + 1).toFloat() / questions.size },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(8.dp),
-            color = AccentBlue,
+            color = FABPink, // ✅ Changed to Pink
             trackColor = Color.White.copy(alpha = 0.5f)
         )
 
@@ -109,13 +110,13 @@ fun QuizScreen(
                                     containerColor = when {
                                         showResult && isCorrectOption -> Color(0xFFB2F2BB)
                                         showResult && isSelected -> Color(0xFFFFB3B3)
-                                        isSelected -> AccentBlue
+                                        isSelected -> FABPink // ✅ Changed to Pink
                                         else -> CardPink
                                     }
                                 )
                             ) {
                                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                    Text(option, color = DarkText, textAlign = TextAlign.Center)
+                                    Text(option, color = if(isSelected) Color.White else DarkText, textAlign = TextAlign.Center)
                                 }
                             }
                         }
@@ -128,7 +129,14 @@ fun QuizScreen(
                             onValueChange = { if (!showResult) fillAnswer = it },
                             modifier = Modifier.fillMaxWidth(),
                             label = { Text("Your Answer") },
-                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = FABPink, focusedLabelColor = FABPink)
+                            textStyle = TextStyle(color = FABPink, fontWeight = FontWeight.Bold, fontSize = 18.sp), // ✅ Pink Text
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = FABPink,
+                                focusedLabelColor = FABPink,
+                                cursorColor = FABPink,
+                                unfocusedBorderColor = CardPink
+                            ),
+                            shape = RoundedCornerShape(16.dp)
                         )
                     }
                 }
@@ -139,7 +147,7 @@ fun QuizScreen(
             Text(
                 if (isCorrect) "✅ Correct!" else "❌ Wrong!",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                color = DarkText,
+                color = if(isCorrect) Color(0xFF4CAF50) else Color.Red,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
