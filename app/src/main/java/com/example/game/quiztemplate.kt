@@ -78,7 +78,7 @@ fun MCQView(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // 🔹 Top Bar
+            
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,7 +91,7 @@ fun MCQView(
                 Icon(Icons.Default.Settings, contentDescription = null)
             }
 
-            // 🔹 Progress
+            
             LinearProgressIndicator(
                 progress = { progress },
                 modifier = Modifier
@@ -102,7 +102,7 @@ fun MCQView(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 🔹 Question Card
+           
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFfad2e1)),
@@ -122,7 +122,7 @@ fun MCQView(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 🔹 Options Grid
+            
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -280,7 +280,7 @@ fun FillBlankView(
                 Icon(Icons.Default.Settings, contentDescription = null)
             }
 
-            // 🔹 Progress
+            
             LinearProgressIndicator(
                 progress = { progress },
                 modifier = Modifier
