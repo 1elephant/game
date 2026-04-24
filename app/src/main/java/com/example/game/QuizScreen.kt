@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// 🎨 COLORS
+
 val BackgroundPink = Color(0xFFFFE1E9)
 val CardPink = Color(0xFFF9C5D5)
 val DarkText = Color(0xFF3E4E88)
@@ -63,7 +63,7 @@ fun QuizScreen(
             IconButton(onClick = {}) { Icon(Icons.Default.Settings, null, tint = DarkText) }
         }
 
-        // PROGRESS BAR
+        
         LinearProgressIndicator(
             progress = { (index + 1).toFloat() / questions.size },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(8.dp),
@@ -73,7 +73,7 @@ fun QuizScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        // QUESTION CARD
+        
         Card(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             shape = RoundedCornerShape(30.dp),
