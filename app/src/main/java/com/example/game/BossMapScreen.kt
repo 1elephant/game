@@ -1,4 +1,5 @@
 package com.example.game
+import android.R.attr.fontFamily
 import android.media.MediaPlayer
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -101,8 +103,9 @@ fun BossMapScreen(
             ) {
 
                 Text(
-                    text = "Chapters",
+                    text = "CHAPTERS",
                     fontSize = 18.sp,
+                    fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF7B9ACC)
                 )
@@ -127,10 +130,10 @@ fun BossMapScreen(
                         .padding(end = 16.dp)
                         .clickable {
                             appViewModel.isSoundOn = !appViewModel.isSoundOn
-                                   },
+                        },
                     tint = Color(0xFF7B9ACC),
 
-                )
+                    )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -176,7 +179,8 @@ fun BossMapScreen(
                     Column(modifier = Modifier.fillMaxSize()) {
 
                         Text(
-                            text = "Menu",
+                            text = "MENU",
+                            fontFamily = FontFamily.Monospace,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 16.dp)
@@ -191,6 +195,7 @@ fun BossMapScreen(
                             onClick = {
                                 selectedItem = "Home"
                                 drawerVisible = false
+                                navController.navigate("home_screen")
                             }
                         )
 
@@ -286,6 +291,7 @@ fun DrawerItem(
             Text(
                 text = title,
                 fontSize = 16.sp,
+                fontFamily = FontFamily.Monospace,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                 color = if (selected) Color(0xFF7B9ACC) else Color.DarkGray
             )

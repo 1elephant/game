@@ -45,7 +45,7 @@ fun QuizScreen(
     val q = questions[index]
 
     Column(modifier = Modifier.fillMaxSize().background(BackgroundPink).statusBarsPadding()) {
-        // TOP BAR
+
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -63,7 +63,6 @@ fun QuizScreen(
             IconButton(onClick = {}) { Icon(Icons.Default.Settings, null, tint = DarkText) }
         }
 
-        // PROGRESS BAR
         LinearProgressIndicator(
             progress = { (index + 1).toFloat() / questions.size },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(8.dp),
@@ -73,7 +72,6 @@ fun QuizScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        // QUESTION CARD
         Card(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             shape = RoundedCornerShape(30.dp),

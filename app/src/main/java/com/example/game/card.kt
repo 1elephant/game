@@ -51,6 +51,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -127,6 +128,7 @@ fun ScoreCard1(
                     text = "Score Card",
                     color = Color(0xFF7B9ACC),
                     fontSize = 22.sp,
+//                    fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -160,6 +162,7 @@ fun ScoreCard1(
                 Text(
                     text = "$percentage%",
                     fontSize = 32.sp,
+//                    fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFF48FB1)
                 )
@@ -212,6 +215,7 @@ fun ScoreCard1(
                     },
                     modifier = Modifier.padding(20.dp),
                     textAlign = TextAlign.Center,
+//                    fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Medium,
                     fontSize = 17.sp,
                     color = Color(0xFF7B9ACC)
@@ -240,187 +244,19 @@ fun StatItem(title: String, value: String) {
             Text(
                 text = value,
                 fontSize = 18.sp,
+//                fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = title,
                 fontSize = 14.sp,
+//                fontFamily = FontFamily.Monospace,
                 color = Color.Gray
             )
         }
     }
 }
-@Composable
-fun ChapterCardCoastal0(
-    level: Int,
-    title: String,
-    description: String,
-    imageRes: Int,
-    progress: BossProgress,
-    navController: NavController
-) {
-    val context = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
 
-    // ✅ Prevent double navigation crash
-    var isNavigating by remember { mutableStateOf(false) }
-
-    val quizUnlocked = progress.isLevelUnlocked(level)
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 15.dp)
-            .shadow(10.dp, RoundedCornerShape(20.dp))
-            .clickable { expanded = !expanded }
-            .animateContentSize(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F7FB)
-        )
-    ) {
-
-        Row {
-            Box {
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(width = 120.dp, height = 145.dp)
-                        .clip(RoundedCornerShape(5.dp)),
-                    contentScale = ContentScale.Crop
-                )
-
-                Box(
-                    modifier = Modifier
-                        .background(Color(0xFF7B9ACC), CircleShape)
-                        .size(45.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = level.toString().padStart(2, '0'),
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 5.dp)
-            ) {
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Text(
-                    text = title,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF2D3A4A)
-                )
-
-                Text(
-                    text = description,
-                    fontSize = 9.sp,
-                    color = Color.Gray,
-                    lineHeight = 12.sp,
-                    maxLines = 2
-                )
-
-                if (expanded) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-
-                        Spacer(modifier = Modifier.width(75.dp))
-
-                        // ▶ Levels Button
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .background(Color(0xFF7B9ACC), CircleShape)
-                                    .clickable {
-                                        if (!isNavigating) {
-                                            isNavigating = true
-                                            navController.navigate(
-                                                Screen.Difficulty.createRoute(level)
-                                            ) {
-                                                launchSingleTop = true
-                                            }
-                                        }
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    Icons.Default.PlayArrow,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-
-                            Text(
-                                "Levels",
-                                fontSize = 10.sp,
-                                color = Color(0xFF7B9ACC)
-                            )
-                        }
-
-                        // 🧠 Quiz Button
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .background(
-                                        if (quizUnlocked) Color(0xFFBFA2DB)
-                                        else Color.LightGray,
-                                        CircleShape
-                                    )
-                                    .clickable {
-                                        if (!isNavigating) {
-                                            if (quizUnlocked) {
-                                                isNavigating = true
-                                                navController.navigate(
-                                                    Screen.QuizMain.createRoute(level)
-                                                ) {
-                                                    launchSingleTop = true
-                                                }
-                                            } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Complete previous chapter first",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    Icons.Default.Psychology,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-
-                            Text(
-                                "Quiz",
-                                fontSize = 10.sp,
-                                color = Color(0xFFBFA2DB)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 @Composable
 fun ChapterCardCoastal(
     level: Int,
@@ -440,167 +276,115 @@ fun ChapterCardCoastal(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(screenHeight * 0.22f) // ✅ responsive height
-            .padding(vertical = 15.dp)
-            .shadow(10.dp, RoundedCornerShape(20.dp))
-            .clickable { showIcons = !showIcons }, // ✅ only toggle visibility
-        shape = RoundedCornerShape(5.dp),
+            .padding(vertical = 12.dp, horizontal = 8.dp)
+            .shadow(6.dp, RoundedCornerShape(20.dp))
+            .clickable { showIcons = !showIcons }
+            .animateContentSize(),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F7FB)
+            containerColor = Color.White
         )
     ) {
-
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-//                .padding(10.dp)
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
-
-            // 📷 IMAGE + LEVEL
-            Box {
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(120.dp)
-                        .fillMaxHeight() // ✅ match card height
-                        .clip(RoundedCornerShape(5.dp)),
-                    contentScale = ContentScale.Crop
-                )
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Circular Level Indicator
                 Box(
                     modifier = Modifier
-//                        .padding(6.dp)
                         .size(45.dp)
-                        .background(Color(0xFF7B9ACC), CircleShape),
+                        .background(Color(0xFFfad2e1), CircleShape)
+                        .border(2.dp, Color(0xFF7B9ACC), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = level.toString().padStart(2, '0'),
-                        color = Color.White,
-                        fontSize = 16.sp
+                        color = Color(0xFF7B9ACC),
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-            }
 
-            Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
-            // 📄 TEXT + ICONS
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(vertical=6.dp,horizontal=9.dp),
-                verticalArrangement = Arrangement.SpaceBetween // ✅ key fix
-            ) {
-
-                // 🔹 Title + Description
-                Column {
+                // Title and Description
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = title,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF2D3A4A)
+                        text = title.uppercase(),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Monospace,
+                        color = Color(0xFF7B9ACC)
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
                         text = description,
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         color = Color.Gray,
-                        lineHeight = 12.sp,
+                        fontFamily = FontFamily.Monospace,
+                        lineHeight = 16.sp,
                         maxLines = 2
                     )
                 }
+            }
 
-                // 🔻 ICONS (fixed bottom, no shifting)
+            // Interactive Icons (Visible on tap)
+            if (showIcons) {
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal=9.dp),
-                    horizontalArrangement = Arrangement.End
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-
-                    // ▶ Levels
-                    AnimatedVisibility(visible = showIcons) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .background(Color(0xFF7B9ACC), CircleShape)
-                                    .clickable {
-                                        if (!isNavigating) {
-                                            isNavigating = true
-                                            navController.navigate(
-                                                Screen.Difficulty.createRoute(level)
-                                            ) {
-                                                launchSingleTop = true
-                                            }
-                                        }
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    Icons.Default.PlayArrow,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
-                            }
-
-                            Text(
-                                "Levels",
-                                fontSize = 10.sp,
-                                color = Color(0xFF7B9ACC)
-                            )
+                    // ▶ Levels Button
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable {
+                        if (!isNavigating) {
+                            isNavigating = true
+                            navController.navigate(Screen.Difficulty.createRoute(level))
                         }
+                    }) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(Color(0xFF7B9ACC), CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.PlayArrow, null, tint = Color.White)
+                        }
+                        Text("LEVELS", fontSize = 10.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF7B9ACC))
                     }
-                    Spacer(modifier=Modifier.width(9.dp))
 
-                    // 🧠 Quiz
-                    AnimatedVisibility(visible = showIcons) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Spacer(modifier = Modifier.width(20.dp))
 
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .background(
-                                        if (quizUnlocked) Color(0xFFBFA2DB)
-                                        else Color.LightGray,
-                                        CircleShape
-                                    )
-                                    .clickable {
-                                        if (!isNavigating) {
-                                            if (quizUnlocked) {
-                                                isNavigating = true
-                                                navController.navigate(
-                                                    Screen.QuizMain.createRoute(level)
-                                                ) {
-                                                    launchSingleTop = true
-                                                }
-                                            } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Complete previous chapter first",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    Icons.Default.Psychology,
-                                    contentDescription = null,
-                                    tint = Color.White
-                                )
+                    // 🧠 Quiz Button
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable {
+                        if (!isNavigating) {
+                            if (quizUnlocked) {
+                                isNavigating = true
+                                navController.navigate(Screen.QuizMain.createRoute(level))
+                            } else {
+                                Toast.makeText(context, "Unlock previous chapter first!", Toast.LENGTH_SHORT).show()
                             }
-
-                            Text(
-                                "Quiz",
-                                fontSize = 10.sp,
-                                color = Color(0xFFBFA2DB)
-                            )
                         }
+                    }) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(if (quizUnlocked) Color(0xFFF48FB1) else Color.LightGray, CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Psychology, null, tint = Color.White)
+                        }
+                        Text("QUIZ", fontSize = 10.sp, fontFamily = FontFamily.Monospace, color = if (quizUnlocked) Color(0xFFF48FB1) else Color.LightGray)
                     }
                 }
             }

@@ -1,0 +1,33 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+<!--  Pink and White Rainbow Background  -->
+<path android:fillColor="#FFC1CC" android:pathData="M16,6h2v4h-2z"/>
+<!--  Light Pink  -->
+<path android:fillColor="#FFFFFF" android:pathData="M18,6h2v4h-2z"/>
+<!--  White  -->
+<path android:fillColor="#FFB6C1" android:pathData="M20,6h2v4h-2z"/>
+<!--  Pink  -->
+<path android:fillColor="#FFFFFF" android:pathData="M22,6h2v4h-2z"/>
+<!--  White  -->
+<path android:fillColor="#FF69B4" android:pathData="M24,6h2v4h-2z"/>
+<!--  Hot Pink  -->
+<path android:fillColor="#FFFFFF" android:pathData="M26,6h2v4h-2z"/>
+<!--  White  -->
+<path android:fillColor="#FFC1CC" android:pathData="M28,6h2v4h-2z"/>
+<!--  Light Pink  -->
+<path android:fillColor="#FFFFFF" android:pathData="M30,6h2v4h-2z"/>
+<!--  White  -->
+<!--  Face/Body  -->
+<path android:fillColor="#FFFFFF" android:pathData="M14,10h20v28h-20z"/>
+<path android:fillColor="#FFFFFF" android:pathData="M16,8h16v2h-16z M16,38h16v2h-16z M12,12h2v24h-2z M34,12h2v24h-2z"/>
+<!--  Outline  -->
+<path android:fillColor="#000000" android:pathData="M16,8h16v2h-16z M12,10h4v2h-4z M10,14h2v20h-2z M12,36h4v2h-4z M16,38h16v2h-16z M32,36h4v2h-4z M36,14h2v20h-2z M32,10h4v2h-4z"/>
+<!--  Eyes (Pretty/Sparkle)  -->
+<path android:fillColor="#000000" android:pathData="M18,20h2v2h-2z M19,19h2v2h-2z M28,20h2v2h-2z M27,19h2v2h-2z"/>
+<path android:fillColor="#FFFFFF" android:pathData="M19,20h1v1h-1z M28,20h1v1h-1z"/>
+<!--  Cheeks (Soft Pink)  -->
+<path android:fillColor="#FFB6C1" android:pathData="M14,24h4v2h-4z M30,24h4v2h-4z"/>
+<!--  Mouth  -->
+<path android:fillColor="#000000" android:pathData="M22,28h4v1h-4z M21,27h1v1h-1z M26,27h1v1h-1z"/>
+<!--  Code Brackets Symbol (Context: Coding App)  -->
+<path android:fillColor="#FF69B4" android:pathData="M20,13l-2,2l2,2 M28,13l2,2l-2,2"/>
+</vector>

@@ -73,7 +73,8 @@ class MainActivity : ComponentActivity() {
                                             } else {
                                                 quizViewModel.loadUserData()
                                                 if (hasProfile) {
-                                                    navController.navigate(Screen.BossMapScreen.route) {
+                                                    // ✅ Navigate to HomeScreen instead of BossMap
+                                                    navController.navigate(Screen.HomeScreen.route) {
                                                         popUpTo(Screen.Login.route) { inclusive = true }
                                                     }
                                                 } else {
@@ -96,6 +97,21 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
+                    }
+
+                    // 🔹 HOME SCREEN (Newly Added)
+                    composable(Screen.HomeScreen.route) {
+                        HomeScreen(navController = navController)
+                    }
+
+                    // 🔹 CREATORS (Newly Added)
+                    composable(Screen.Creators.route) {
+                        CreatorsScreen(navController = navController)
+                    }
+
+                    // 🔹 VISION (Newly Added)
+                    composable(Screen.Vision.route) {
+                        VisionScreen(navController = navController)
                     }
 
                     // 🔹 BOSS MAP
@@ -121,7 +137,7 @@ class MainActivity : ComponentActivity() {
                             appViewModel = appViewModel,
                             onSave = {
                                 quizViewModel.loadUserData()
-                                navController.navigate(Screen.BossMapScreen.route) {
+                                navController.navigate(Screen.HomeScreen.route) {
                                     popUpTo("profile_setup") { inclusive = true }
                                 }
                             }
@@ -146,7 +162,7 @@ class MainActivity : ComponentActivity() {
 
                         ScoreCard1(
                             appViewModel = appViewModel,
-                            navController = navController, // ✅ FIXED: Passed missing parameter
+                            navController = navController,
                             totalQuestions = total,
                             correctAnswers = score
                         )
@@ -171,7 +187,6 @@ class MainActivity : ComponentActivity() {
                                 level = chapter,
                                 onQuizFinished = { _, score ->
                                     quizViewModel.submitLearningScore(chapter, difficulty, score)
-                                    // ✅ FIX: Remove quiz from backstack when moving to scorecard
                                     navController.navigate("score_screen/$score/${questions.size}") {
                                         popUpTo(Screen.LearningQuiz.route) { inclusive = true }
                                     }
@@ -194,7 +209,6 @@ class MainActivity : ComponentActivity() {
                                 level = level,
                                 onQuizFinished = { lvl, score ->
                                     quizViewModel.submitScore(lvl, score)
-                                    // ✅ FIX: Remove quiz from backstack when moving to scorecard
                                     navController.navigate("score_screen/$score/${questions.size}") {
                                         popUpTo(Screen.QuizMain.route) { inclusive = true }
                                     }

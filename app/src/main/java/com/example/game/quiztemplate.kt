@@ -280,7 +280,7 @@ fun FillBlankView(
                 Icon(Icons.Default.Settings, contentDescription = null)
             }
 
-            // 🔹 Progress
+            // 🔹 Progres
             LinearProgressIndicator(
                 progress = { progress },
                 modifier = Modifier

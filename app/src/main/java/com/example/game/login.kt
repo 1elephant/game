@@ -3,231 +3,201 @@ package com.example.game
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.AutofillNode
-import androidx.compose.ui.autofill.AutofillType
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalAutofill
-import androidx.compose.ui.platform.LocalAutofillTree
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+// Pixel Art Palette
+val PixelPinkLight = Color(0xFFFFF5F7)
+val PixelPinkMedium = Color(0xFFFFB6C1)
+val PixelPinkDark = Color(0xFFFF69B4)
+val PixelBorder = Color(0xFFD81B60)
+val PixelShadow = Color(0xFF880E4F)
 
-@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun PixelButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false
+) {
+    Box(
+        modifier = modifier
+            .padding(4.dp)
+            .background(PixelShadow)
+            .padding(bottom = 4.dp, end = 4.dp)
+            .background(PixelBorder)
+            .padding(2.dp)
+            .background(if (isLoading) Color.Gray else PixelPinkMedium)
+            .clickable(enabled = !isLoading, onClick = onClick)
+            .padding(horizontal = 24.dp, vertical = 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp))
+        } else {
+            Text(
+                text = text,
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace
+            )
+        }
+    }
+}
+
 @Composable
 fun LoginScreen(
     onContinue: (email: String, password: String) -> Unit
-){
+) {
     val auth = FirebaseAuth.getInstance()
-    val db = FirebaseFirestore.getInstance()
     val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
 
-    val primaryBlue = Color(0xFF7B9ACC)
-    val accentPink = Color(0xFFF48FB1)
-
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-
-    val autofill = LocalAutofill.current
-    val autofillTree = LocalAutofillTree.current
-
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFFFCCD5))) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(screenHeight * 0.3f)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.pink2),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.matchParentSize()
-            )
-
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(Color(0x66FAD2E1))
-            )
-
-            Text(
-                text = "Welcome",
-                color = primaryBlue,
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PixelPinkLight)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = screenHeight * 0.45f),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            val emailAutofillNode = AutofillNode(
-                autofillTypes = listOf(AutofillType.EmailAddress),
-                onFill = { email = it }
+            // Pixel Art Logo
+            Image(
+                painter = painterResource(id = R.drawable.ic_app_logo),
+                contentDescription = "Logo",
+                modifier = Modifier.size(120.dp)
             )
-            autofillTree += emailAutofillNode
 
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                singleLine = true,
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "KOTIFY",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace,
+                color = PixelPinkDark
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Pixel-style Window/Card
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .onGloballyPositioned { emailAutofillNode.boundingBox = it.localBoundingBoxOf(it) }
-                    .onFocusChanged { autofill?.run { if (it.isFocused) requestAutofillForNode(emailAutofillNode) else cancelAutofillForNode(emailAutofillNode) } },
-                colors = fieldColors(primaryBlue, accentPink),
-                enabled = !isLoading
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            val passwordAutofillNode = AutofillNode(
-                autofillTypes = listOf(AutofillType.Password),
-                onFill = { password = it }
-            )
-            autofillTree += passwordAutofillNode
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .onGloballyPositioned { passwordAutofillNode.boundingBox = it.localBoundingBoxOf(it) }
-                    .onFocusChanged { autofill?.run { if (it.isFocused) requestAutofillForNode(passwordAutofillNode) else cancelAutofillForNode(passwordAutofillNode) } },
-                colors = fieldColors(primaryBlue, accentPink),
-                shape = RoundedCornerShape(16.dp),
-                enabled = !isLoading
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = {
-                    if (email.isNotBlank() && password.isNotBlank()) {
-                        isLoading = true
-                        
-                        val cleanEmail = email.trim()
-                        val cleanPassword = password.trim()
-
-                        auth.signInWithEmailAndPassword(cleanEmail, cleanPassword)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    isLoading = false
-                                    onContinue(cleanEmail, cleanPassword)
-                                } else {
-                                    // 🚀 Create account AND placeholder doc immediately
-                                    auth.createUserWithEmailAndPassword(cleanEmail, cleanPassword)
-                                        .addOnCompleteListener { createTask ->
-                                            if (createTask.isSuccessful) {
-                                                val uid = createTask.result?.user?.uid
-                                                if (uid != null) {
-                                                    val placeholder = hashMapOf(
-                                                        "email" to cleanEmail,
-                                                        "username" to "Explorer",
-                                                        "emoji" to "😀",
-                                                        "bossScores" to listOf<Int>(),
-                                                        "learningScores" to mapOf<String, Int>()
-                                                    )
-                                                    db.collection("users").document(uid).set(placeholder)
-                                                        .addOnSuccessListener {
-                                                            isLoading = false
-                                                            onContinue(cleanEmail, cleanPassword)
-                                                        }
-                                                        .addOnFailureListener {
-                                                            isLoading = false
-                                                            // If DB fails, we still let them in (will sync later)
-                                                            onContinue(cleanEmail, cleanPassword)
-                                                        }
-                                                } else {
-                                                    isLoading = false
-                                                    onContinue(cleanEmail, cleanPassword)
-                                                }
-                                            } else {
-                                                isLoading = false
-                                                val errorMsg = createTask.exception?.message ?: "Auth Failed"
-                                                Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
-                                            }
-                                        }
-                                }
-                            }
-                    } else {
-                        Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .padding(horizontal = 20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primaryBlue),
-                shape = RoundedCornerShape(16.dp),
-                enabled = !isLoading
+                    .background(PixelShadow)
+                    .padding(bottom = 4.dp, end = 4.dp)
+                    .background(PixelBorder)
+                    .padding(2.dp)
+                    .background(Color.White)
+                    .padding(20.dp)
             ) {
-                if (isLoading) {
-                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                } else {
-                    Text("Continue", color = Color.White)
+                Column {
+                    Text(
+                        text = "LOGIN",
+                        fontSize = 20.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold,
+                        color = PixelBorder
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Retro Input Fields
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text("email", fontFamily = FontFamily.Monospace) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = PixelPinkDark,
+                            unfocusedBorderColor = PixelBorder
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("password", fontFamily = FontFamily.Monospace) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = PixelPinkDark,
+                            unfocusedBorderColor = PixelBorder
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    PixelButton(
+                        text = "CONTINUE",
+                        isLoading = isLoading,
+                        onClick = {
+                            if (email.isNotBlank() && password.isNotBlank()) {
+                                isLoading = true
+                                val cleanEmail = email.trim()
+                                val cleanPassword = password.trim()
+
+                                // 🚀 Updated Logic: Always try to Log In, if fails, Always try to Sign Up.
+                                auth.signInWithEmailAndPassword(cleanEmail, cleanPassword)
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            isLoading = false
+                                            onContinue(cleanEmail, cleanPassword)
+                                        } else {
+                                            // Account might not exist, so just create it!
+                                            auth.createUserWithEmailAndPassword(cleanEmail, cleanPassword)
+                                                .addOnCompleteListener { createTask ->
+                                                    isLoading = false
+                                                    if (createTask.isSuccessful) {
+                                                        onContinue(cleanEmail, cleanPassword)
+                                                    } else {
+                                                        val error = createTask.exception?.message ?: "Auth Error"
+                                                        if (error.contains("already in use", ignoreCase = true)) {
+                                                            Toast.makeText(context, "Wrong password for this email!", Toast.LENGTH_SHORT).show()
+                                                        } else {
+                                                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                    }
+                            } else {
+                                Toast.makeText(context, "Fill all fields!", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreen() {
-    LoginScreen { _, _ -> }
 }
