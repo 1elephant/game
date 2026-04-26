@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// 🎨 COLORS
+
 val BackgroundPink = Color(0xFFFFE1E9)
 val CardPink = Color(0xFFF9C5D5)
 val DarkText = Color(0xFF3E4E88)
